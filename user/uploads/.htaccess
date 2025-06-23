@@ -1,0 +1,11 @@
+# Blokir eksekusi file PHP atau script lain di folder ini
+<FilesMatch "\.(php|php5|phtml|pl|py|jsp|asp|sh)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Nonaktifkan eksekusi CGI
+Options -ExecCGI
+
+# Cegah pengolahan file sebagai PHP
+AddType text/plain .php .php5 .phtml

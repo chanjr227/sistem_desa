@@ -2,7 +2,6 @@
 require 'config/config.php';
 session_start();
 
-// Jika user sudah login, arahkan berdasarkan role
 if (isset($_SESSION['log'])) {
     if ($_SESSION['role'] === 'admin') {
         header('Location: admin/dashboard.php');
@@ -15,9 +14,8 @@ if (isset($_SESSION['log'])) {
 $message = null;
 $messageType = null;
 
-// Jika form disubmit (metode POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'];
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
 
     $stmt = mysqli_prepare($koneksi, "SELECT * FROM users WHERE email = ?");
@@ -27,31 +25,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($result && mysqli_num_rows($result) > 0) {
         $data = mysqli_fetch_assoc($result);
-    } else {
-        $data = null;
-    }
 
-    if ($data && password_verify($password, $data['password'])) {
-        $_SESSION['log'] = true;
-        $_SESSION['userid'] = $data['userid'];
-        $_SESSION['email'] = $data['email'];
-        $_SESSION['role'] = $data['role'];
-
-        // Pesan login berhasil hanya untuk user biasa (bukan admin)
-        if ($data['role'] === 'admin') {
-            header('Location: admin/dashboard.php');
-        } else {
-            $_SESSION['login_success'] = "Login berhasil. Selamat datang!";
-            header('Location: index.php');
+        // Cek apakah akun dikunci
+        if ($data['is_locked']) {
+            $message = "⚠️ Akun Anda dikunci karena terlalu banyak percobaan login gagal.<br>
+                <a href='kirim-unlock-link.php?email=" . urlencode($email) . "'>Klik di sini untuk buka blokir via email</a>";
+            $messageType = "error";
         }
-        exit;
+        // Jika akun tidak terkunci, lanjut verifikasi password
+        elseif (password_verify($password, $data['password'])) {
+            // Reset login_attempts dan is_locked
+            $stmt = $koneksi->prepare("UPDATE users SET login_attempts = 0, is_locked = 0 WHERE userid = ?");
+            $stmt->bind_param("i", $data['userid']);
+            $stmt->execute();
+
+            $_SESSION['log'] = true;
+            $_SESSION['userid'] = $data['userid'];
+            $_SESSION['email'] = $data['email'];
+            $_SESSION['role'] = $data['role'];
+
+            if ($data['role'] === 'admin') {
+                header('Location: admin/dashboard.php');
+            } else {
+                $_SESSION['login_success'] = "Login berhasil. Selamat datang!";
+                header('Location: index.php');
+            }
+            exit;
+        } else {
+            // Tambah 1 ke login_attempts
+            $attempts = $data['login_attempts'] + 1;
+            $is_locked = $attempts >= 3 ? 1 : 0;
+
+            $stmt = $koneksi->prepare("UPDATE users SET login_attempts = ?, is_locked = ? WHERE userid = ?");
+            $stmt->bind_param("iii", $attempts, $is_locked, $data['userid']);
+            $stmt->execute();
+
+            if ($is_locked) {
+                $message = "⚠️ Akun Anda telah dikunci karena 3 kali login gagal.<br>
+                    <a href='kirim-unlock-link.php?email=" . urlencode($email) . "'>Klik di sini untuk buka blokir via email</a>";
+            } else {
+                $message = "Email atau password salah! Percobaan ke-{$attempts}.";
+            }
+            $messageType = "error";
+        }
     } else {
-        $message = "Email atau password salah!";
+        $message = "Akun tidak ditemukan!";
         $messageType = "error";
     }
 }
 ?>
-
 
 
 <!DOCTYPE html>
@@ -69,9 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h1>Login</h1>
 
             <?php if ($message): ?>
-    <div class="alert <?= $messageType ?>">
-        <?= $message ?>
-    </div>
+                <div class="alert <?= $messageType ?>" style="font-size: 14px; line-height: 1.5;">
+    <?= $message ?>
+</div>
+
 <?php endif; ?>
 
 
