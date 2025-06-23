@@ -16,6 +16,7 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard Desa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/user.css" rel="stylesheet" />
@@ -31,31 +32,29 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
 <?php endif; ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
+    <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center">
         <a class="navbar-brand" href="#">Sistem Informasi Desa</a>
-        <div class="d-flex">
+        <div class="d-flex flex-wrap align-items-center">
             <span class="navbar-text text-white me-3">Halo, <?= htmlspecialchars($nama_user) ?></span>
             <?php if (isset($_SESSION['log']) && $_SESSION['log'] === true): ?>
-                <a href="user/logout.php" class="btn btn-outline-light">Logout</a>
+                <a href="user/logout.php" class="btn btn-outline-light btn-sm">Logout</a>
             <?php else: ?>
-                <a href="login.php" class="btn btn-outline-light">Login</a>
+                <a href="login.php" class="btn btn-outline-light btn-sm">Login</a>
             <?php endif; ?>
         </div>
     </div>
 </nav>
 
-<section class="hero-cover">
-    <div class="text-center">
-        <h1 class="hero-title" data-text="Desa Rajeg">Desa Rajeg</h1>
-        <p class="hero-subtitle animate-shine">Menuju Desa Digital, Maju dan Sejahtera</p>
-    </div>
+<section class="hero-cover text-center p-5">
+    <h1 class="hero-title" data-text="Desa Rajeg">Desa Rajeg</h1>
+    <p class="hero-subtitle animate-shine">Menuju Desa Digital, Maju dan Sejahtera</p>
 </section>
 
 <div class="container mt-5">
     <h2 class="mb-4">Dashboard Utama</h2>
 
     <div class="row g-4">
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Profil Desa</h5>
@@ -63,7 +62,7 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Jumlah Penduduk</h5>
@@ -72,7 +71,7 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="card border-primary card-menu-animate">
                 <div class="card-body">
                     <h5 class="card-title">Laporan Bencana</h5>
@@ -82,7 +81,7 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="card border-success card-menu-animate">
                 <div class="card-body">
                     <h5 class="card-title">Pengajuan Surat</h5>
@@ -92,7 +91,7 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="card border-info card-menu-animate">
                 <div class="card-body">
                     <h5 class="card-title">Kesehatan Desa</h5>
@@ -103,56 +102,52 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
         </div>
     </div>
 
-<div class="mt-5">
-    <h4 class="mb-3">📋 Jadwal Kegiatan Umum</h4>
-    <div class="row g-3">
-        <?php if ($jadwal_kegiatan_umum && mysqli_num_rows($jadwal_kegiatan_umum) > 0): ?>
-            <?php while($k = mysqli_fetch_assoc($jadwal_kegiatan_umum)): ?>
-                <div class="col-md-4">
-                    <div class="card shadow-sm border-secondary card-menu-animate h-100">
+    <div class="mt-5">
+        <h4 class="mb-3">📋 Jadwal Kegiatan Umum</h4>
+        <div class="row g-3">
+            <?php if ($jadwal_kegiatan_umum && mysqli_num_rows($jadwal_kegiatan_umum) > 0): ?>
+                <?php while($k = mysqli_fetch_assoc($jadwal_kegiatan_umum)): ?>
+                    <div class="col-12 col-md-4">
+                        <div class="card shadow-sm border-secondary card-menu-animate h-100">
+                            <div class="card-body">
+                                <h6 class="card-subtitle text-muted mb-1">
+                                    <?= date('d M Y', strtotime($k['tanggal'])) ?> - <?= htmlspecialchars($k['waktu'] ?? '-') ?>
+                                </h6>
+                                <h5 class="card-title"><?= htmlspecialchars($k['nama_kegiatan']) ?></h5>
+                                <p class="card-text"><?= htmlspecialchars($k['keterangan'] ?? 'Tidak ada keterangan') ?></p>
+                                <span class="badge bg-dark">Lokasi: <?= htmlspecialchars($k['lokasi'] ?? '-') ?></span>
+                            </div>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <div class="col-12">
+                    <div class="alert alert-warning text-center">Belum ada jadwal kegiatan umum.</div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h4 class="mb-3">🩺 Jadwal Posyandu</h4>
+        <div class="row g-3">
+            <?php while($p = mysqli_fetch_assoc($jadwal_posyandu)): ?>
+                <div class="col-12 col-md-4">
+                    <div class="card shadow-sm border-info card-menu-animate h-100">
                         <div class="card-body">
                             <h6 class="card-subtitle text-muted mb-1">
-                                <?= date('d M Y', strtotime($k['tanggal'])) ?> - <?= htmlspecialchars($k['waktu'] ?? '-') ?>
+                                <?= date('d M Y', strtotime($p['tanggal'])) ?> - <?= htmlspecialchars($p['waktu'] ?? '-') ?>
                             </h6>
-                            <h5 class="card-title"><?= htmlspecialchars($k['nama_kegiatan']) ?></h5>
-                            <p class="card-text"><?= htmlspecialchars($k['keterangan'] ?? 'Tidak ada keterangan') ?></p>
-                            <span class="badge bg-dark">Lokasi: <?= htmlspecialchars($k['lokasi'] ?? '-') ?></span>
+                            <h5 class="card-title"><?= htmlspecialchars($p['lokasi']) ?></h5>
+                            <p class="card-text"><?= htmlspecialchars($p['keterangan'] ?? 'Tidak ada keterangan') ?></p>
+                            <span class="badge bg-primary">Petugas: <?= htmlspecialchars($p['petugas'] ?? '-') ?></span>
                         </div>
                     </div>
                 </div>
             <?php endwhile; ?>
-        <?php else: ?>
-            <div class="col-12">
-                <div class="alert alert-warning text-center">Belum ada jadwal kegiatan umum.</div>
-            </div>
-        <?php endif; ?>
+        </div>
     </div>
-</div>
 
-
-<!-- 📌 Jadwal Posyandu -->
-<div class="mt-5">
-    <h4 class="mb-3">🩺 Jadwal Posyandu</h4>
-    <div class="row g-3">
-        <?php while($p = mysqli_fetch_assoc($jadwal_posyandu)): ?>
-            <div class="col-md-4">
-                <div class="card shadow-sm border-info card-menu-animate h-100">
-                    <div class="card-body">
-                        <h6 class="card-subtitle text-muted mb-1">
-                            <?= date('d M Y', strtotime($p['tanggal'])) ?> - <?= htmlspecialchars($p['waktu'] ?? '-') ?>
-                        </h6>
-                        <h5 class="card-title"><?= htmlspecialchars($p['lokasi']) ?></h5>
-                        <p class="card-text"><?= htmlspecialchars($p['keterangan'] ?? 'Tidak ada keterangan') ?></p>
-                        <span class="badge bg-primary">Petugas: <?= htmlspecialchars($p['petugas'] ?? '-') ?></span>
-                    </div>
-                </div>
-            </div>
-        <?php endwhile; ?>
-    </div>
-</div>
-
-
-    <!-- Sambutan -->
     <div class="sambutan-box fade-in mt-5" id="sambutan">
         <h5>Sambutan Kepala Desa</h5>
         <p>
@@ -164,7 +159,6 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
         <p class="text-end"><strong>– Bapak Yanyan, Kepala Desa</strong></p>
     </div>
 
-    <!-- Struktur Organisasi -->
     <div class="mt-5">
         <h4 class="text-center mb-4">Struktur Organisasi Pemerintahan Desa</h4>
         <div class="tree">
