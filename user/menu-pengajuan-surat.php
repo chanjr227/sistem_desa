@@ -1,11 +1,15 @@
 <?php
 session_start();
 require '../config/config.php';
+require '../helpers/log_helpers.php';
 
 if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
     header('Location: ../login.php');
     exit;
 }
+
+ // Panggil log
+        simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim laporan bencana');
 
 $user_id = $_SESSION['userid'];
 $nama_user = $_SESSION['nama'] ?? 'Warga';

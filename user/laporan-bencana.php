@@ -1,6 +1,8 @@
 <?php
 session_start();
 require '../config/config.php';
+require '../helpers/log_helpers.php';
+
 
 if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
     header('Location: ../login.php');
@@ -62,6 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
+
+         // Panggil log
+        simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim laporan bencana');
 
         if (!$error) {
             $stmt = $koneksi->prepare("INSERT INTO laporan (userid, nama_pelapor, jenis_bencana, deskripsi, tanggal_laporan, kota, lokasi, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");

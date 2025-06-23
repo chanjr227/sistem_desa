@@ -35,8 +35,8 @@ if ($result && $user = $result->fetch_assoc()) {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = ''; // GANTI dengan email kamu
-        $mail->Password   = '';    // GANTI dengan app password Gmail kamu
+        $mail->Username   = 'chandrajr227@gmail.com'; // GANTI dengan email kamu
+        $mail->Password   = 'mato rqks nsvf inbg';    // GANTI dengan app password Gmail kamu
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
 
@@ -48,7 +48,7 @@ if ($result && $user = $result->fetch_assoc()) {
         $mail->Subject = '🔓 Link Pembukaan Blokir Akun Anda';
 
         // Gunakan domain HTTPS kamu di sini saat sudah live
-        $link = "https://sagarawatch.biz.id/user/unlock-akun.php?token=$token";
+        $link = "https://namadomain.com/user/unlock-akun.php?token=$token";
 
         $mail->Body = "Halo,<br><br>
             Anda telah meminta untuk membuka akun yang terkunci.<br>

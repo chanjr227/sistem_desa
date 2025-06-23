@@ -73,7 +73,7 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="kesehatan-admin.php">Layanan kesehatans</a>
-                                    <a class="nav-link" href="laporan-bencana-admin.php"></a>
+                                    <a class="nav-link" href="log-user.php">Log user</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
