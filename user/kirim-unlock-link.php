@@ -41,7 +41,7 @@ if ($result && $user = $result->fetch_assoc()) {
         $mail->Port       = 465;
 
         // Email pengirim dan penerima
-        $mail->setFrom('chandrajr227@gmail.com', 'Sistem Informasi Desa');
+        $mail->setFrom('', 'Sistem Informasi Desa');
         $mail->addAddress($email);
 
         $mail->isHTML(true);
