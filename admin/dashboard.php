@@ -4,6 +4,87 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../login.php');
     exit;
 }
+
+require_once '../config/config.php'; // pastikan koneksi di-include
+
+// Lanjutkan dengan query data
+$pengaduanPerBulan = array_fill(1, 12, 0);
+
+$query = $koneksi->query("SELECT MONTH(tanggal_pengaduan) AS bulan, COUNT(*) AS total FROM pengaduan GROUP BY bulan");
+while ($row = $query->fetch_assoc()) {
+    $pengaduanPerBulan[(int)$row['bulan']] = (int)$row['total'];
+}
+
+$jsonData = json_encode(array_values($pengaduanPerBulan));
+
+// Query jumlah penduduk berdasarkan jenis kelamin
+$jenisKelaminQuery = $koneksi->query("SELECT jenis_kelamin, COUNT(*) AS total FROM penduduk GROUP BY jenis_kelamin");
+
+$dataJenisKelamin = [];
+while ($row = $jenisKelaminQuery->fetch_assoc()) {
+    $dataJenisKelamin[$row['jenis_kelamin']] = (int)$row['total'];
+}
+
+// Jika data kosong, isi default 0
+$jkLaki = $dataJenisKelamin['Laki-laki'] ?? 0;
+$jkPerempuan = $dataJenisKelamin['Perempuan'] ?? 0;
+
+// Encode ke JSON untuk JavaScript
+$jsonBarChart = json_encode([$jkLaki, $jkPerempuan]);
+
+
+// Tambah anggota
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah'])) {
+    $nama = $_POST['nama'];
+    $jabatan = $_POST['jabatan'];
+    $foto = $_FILES['foto'];
+
+    $namaFoto = '';
+    if ($foto['name'] !== '') {
+        $namaFoto = uniqid() . '-' . basename($foto['name']);
+        move_uploaded_file($foto['tmp_name'], '../uploads/' . $namaFoto);
+    }
+
+    $stmt = $koneksi->prepare("INSERT INTO struktur_organisasi (nama, jabatan, foto) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $nama, $jabatan, $namaFoto);
+    $stmt->execute();
+    header("Location: dashboard.php");
+    exit;
+}
+
+// Edit anggota
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit'])) {
+    $id = $_POST['id'];
+    $nama = $_POST['nama'];
+    $jabatan = $_POST['jabatan'];
+    $fotoBaru = $_FILES['foto'];
+
+    if ($fotoBaru['name'] !== '') {
+        $namaFoto = uniqid() . '-' . basename($fotoBaru['name']);
+        move_uploaded_file($fotoBaru['tmp_name'], '../uploads/' . $namaFoto);
+        $stmt = $koneksi->prepare("UPDATE struktur_organisasi SET nama=?, jabatan=?, foto=? WHERE id=?");
+        $stmt->bind_param("sssi", $nama, $jabatan, $namaFoto, $id);
+    } else {
+        $stmt = $koneksi->prepare("UPDATE struktur_organisasi SET nama=?, jabatan=? WHERE id=?");
+        $stmt->bind_param("ssi", $nama, $jabatan, $id);
+    }
+    $stmt->execute();
+    header("Location: dashboard.php");
+    exit;
+}
+
+// Hapus anggota
+if (isset($_GET['hapus'])) {
+    $id = $_GET['hapus'];
+    $stmt = $koneksi->prepare("DELETE FROM struktur_organisasi WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    header("Location: dashboard.php");
+    exit;
+}
+
+// Ambil data struktur
+$struktur = $koneksi->query("SELECT * FROM struktur_organisasi");
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +154,6 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="kesehatan-admin.php">Layanan kesehatans</a>
-                                    <a class="nav-link" href="log-user.php">Log user</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -100,6 +180,7 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
                                         <nav class="sb-sidenav-menu-nested nav">
                                             <a class="nav-link" href="pengajuan-surat-admin.php">Surat pengantarr</a>
                                             <a class="nav-link" href="jadwal-kegiatan-admin.php">Jadwal kegiatan</a>
+                                            <a class="nav-link" href="log-user.php">Log user</a>
                                         </nav>
                                     </div>
                                 </nav>
@@ -128,50 +209,90 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Dashboard</li>
                         </ol>
-                        <div class="row">
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Primary Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Warning Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Success Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Danger Card</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="row">
+    <!-- Card: Laporan Pengaduan -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs fw-bold text-primary text-uppercase mb-1">
+                            Laporan Pengaduan
                         </div>
+                        <a href="layanan-pengaduan-admin.php" class="text-decoration-none small">Lihat detail</a>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-comments fa-2x text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card: Layanan Kesehatan -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs fw-bold text-success text-uppercase mb-1">
+                            Layanan Kesehatan
+                        </div>
+                        <a href="kesehatan-admin.php" class="text-decoration-none small">Lihat detail</a>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-heartbeat fa-2x text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card: Tambah Penduduk -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs fw-bold text-warning text-uppercase mb-1">
+                            Tambah Penduduk
+                        </div>
+                        <a href="tambah-penduduk-admin.php" class="text-decoration-none small">Lihat detail</a>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-plus fa-2x text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card: Surat Pengantar -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs fw-bold text-danger text-uppercase mb-1">
+                            Surat Pengantar
+                        </div>
+                        <a href="pengajuan-surat-admin.php" class="text-decoration-none small">Lihat detail</a>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-envelope-open-text fa-2x text-danger"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
                         <div class="row">
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
+                                        Jumlah pengaduan
                                     </div>
                                     <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
                                 </div>
@@ -180,158 +301,116 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
+                                        Jumlah penduduk
                                     </div>
                                     <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                DataTable Example
-                            </div>
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>63</td>
-                                            <td>2011/07/25</td>
-                                            <td>$170,750</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ashton Cox</td>
-                                            <td>Junior Technical Author</td>
-                                            <td>San Francisco</td>
-                                            <td>66</td>
-                                            <td>2009/01/12</td>
-                                            <td>$86,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Cedric Kelly</td>
-                                            <td>Senior Javascript Developer</td>
-                                            <td>Edinburgh</td>
-                                            <td>22</td>
-                                            <td>2012/03/29</td>
-                                            <td>$433,060</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Airi Satou</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>33</td>
-                                            <td>2008/11/28</td>
-                                            <td>$162,700</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Brielle Williamson</td>
-                                            <td>Integration Specialist</td>
-                                            <td>New York</td>
-                                            <td>61</td>
-                                            <td>2012/12/02</td>
-                                            <td>$372,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Herrod Chandler</td>
-                                            <td>Sales Assistant</td>
-                                            <td>San Francisco</td>
-                                            <td>59</td>
-                                            <td>2012/08/06</td>
-                                            <td>$137,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Rhona Davidson</td>
-                                            <td>Integration Specialist</td>
-                                            <td>Tokyo</td>
-                                            <td>55</td>
-                                            <td>2010/10/14</td>
-                                            <td>$327,900</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Colleen Hurst</td>
-                                            <td>Javascript Developer</td>
-                                            <td>San Francisco</td>
-                                            <td>39</td>
-                                            <td>2009/09/15</td>
-                                            <td>$205,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sonya Frost</td>
-                                            <td>Software Engineer</td>
-                                            <td>Edinburgh</td>
-                                            <td>23</td>
-                                            <td>2008/12/13</td>
-                                            <td>$103,600</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jena Gaines</td>
-                                            <td>Office Manager</td>
-                                            <td>London</td>
-                                            <td>30</td>
-                                            <td>2008/12/19</td>
-                                            <td>$90,560</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Quinn Flynn</td>
-                                            <td>Support Lead</td>
-                                            <td>Edinburgh</td>
-                                            <td>22</td>
-                                            <td>2013/03/03</td>
-                                            <td>$342,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Charde Marshall</td>
-                                            <td>Regional Director</td>
-                                            <td>San Francisco</td>
-                                            <td>36</td>
-                                            <td>2008/10/16</td>
-                                            <td>$470,600</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Haley Kennedy</td>
-                                            <td>Senior Marketing Designer</td>
-                                            <td>London</td>
-                                            <td>43</td>
-                                            <td>2012/12/18</td>
-                                            <td>$313,500</td>
-                                        </tr>
-                                     </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+<div class="card mb-4">
+  <div class="card-header">
+    <i class="fas fa-sitemap me-1"></i>
+    Struktur Organisasi
+    <button class="btn btn-sm btn-success float-end" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah</button>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Jabatan</th>
+          <th>Foto</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php while($row = $struktur->fetch_assoc()): ?>
+        <tr>
+          <td><?= htmlspecialchars($row['nama']) ?></td>
+          <td><?= htmlspecialchars($row['jabatan']) ?></td>
+          <td>
+            <?php if ($row['foto']): ?>
+            <img src="../uploads/<?= htmlspecialchars($row['foto']) ?>" width="50" height="50" style="border-radius: 50%">
+            <?php else: ?>
+            <span>Tidak ada</span>
+            <?php endif; ?>
+          </td>
+          <td>
+            <button class="btn btn-warning btn-sm btn-edit" data-id="<?= $row['id'] ?>" data-nama="<?= htmlspecialchars($row['nama']) ?>" data-jabatan="<?= htmlspecialchars($row['jabatan']) ?>" data-foto="<?= htmlspecialchars($row['foto']) ?>" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit</button>
+            <a href="?hapus=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">Hapus</a>
+          </td>
+        </tr>
+        <?php endwhile; ?>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Tambah -->
+<div class="modal fade" id="modalTambah" tabindex="-1">
+  <div class="modal-dialog">
+    <form action="dashboard.php" method="POST" enctype="multipart/form-data" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Tambah Anggota</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="tambah" value="1">
+        <div class="mb-3">
+          <label>Nama</label>
+          <input type="text" name="nama" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label>Jabatan</label>
+          <input type="text" name="jabatan" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label>Foto</label>
+          <input type="file" name="foto" class="form-control">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Edit -->
+<div class="modal fade" id="modalEdit" tabindex="-1">
+  <div class="modal-dialog">
+    <form action="dashboard.php" method="POST" enctype="multipart/form-data" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Anggota</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="edit" value="1">
+        <input type="hidden" name="id" id="edit-id">
+        <div class="mb-3">
+          <label>Nama</label>
+          <input type="text" name="nama" id="edit-nama" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label>Jabatan</label>
+          <input type="text" name="jabatan" id="edit-jabatan" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label>Foto Saat Ini</label><br>
+          <img id="edit-preview" src="" width="60">
+        </div>
+        <div class="mb-3">
+          <label>Ganti Foto</label>
+          <input type="file" name="foto" class="form-control">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
@@ -350,9 +429,73 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="../js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="../assets/demo/chart-area-demo.js"></script>
-        <script src="../assets/demo/chart-bar-demo.js"></script>
+        <!-- <script src="../assets/demo/chart-area-demo.js"></script> -->
+        <!-- <script src="../assets/demo/chart-bar-demo.js"></script> -->
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="../js/datatables-simple-demo.js"></script>
+        <script>
+const dataPengaduan = <?= $jsonData ?>;
+
+const areaCtx = document.getElementById("myAreaChart").getContext("2d");
+const myChart = new Chart(areaCtx, {
+  type: "line",
+  data: {
+    labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
+    datasets: [{
+      label: "Jumlah Pengaduan",
+      backgroundColor: "rgba(78, 115, 223, 0.05)",
+      borderColor: "rgba(78, 115, 223, 1)",
+      data: dataPengaduan
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true }
+    }
+  }
+});
+</script>
+
+<script>
+const dataJenisKelamin = <?= $jsonBarChart ?>;
+
+const barCtx = document.getElementById("myBarChart").getContext("2d");
+new Chart(barCtx, {
+  type: "bar",
+  data: {
+    labels: ["Laki-laki", "Perempuan"],
+    datasets: [{
+      label: "Jumlah Penduduk",
+      backgroundColor: ["#4e73df", "#e74a3b"],
+      borderColor: ["#4e73df", "#e74a3b"],
+      borderWidth: 1,
+      data: dataJenisKelamin
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true }
+    }
+  }
+});
+</script>
+
+<script>
+document.querySelectorAll('.btn-edit').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.getElementById('edit-id').value = this.dataset.id;
+    document.getElementById('edit-nama').value = this.dataset.nama;
+    document.getElementById('edit-jabatan').value = this.dataset.jabatan;
+    document.getElementById('edit-preview').src = '../uploads/' + this.dataset.foto;
+    document.getElementById('edit-foto-lama').value = this.dataset.foto;
+  });
+});
+</script>
     </body>
 </html>
