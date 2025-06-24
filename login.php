@@ -3,12 +3,13 @@ require 'config/config.php';
 require 'helpers/log_helpers.php';
 session_start();
 
-// Tampilkan notifikasi jika logout otomatis karena timeout
+// Notifikasi timeout logout
 if (isset($_GET['timeout'])) {
     $message = "⏱️ Sesi Anda telah berakhir karena tidak aktif selama 20 menit.";
     $messageType = "warning";
 }
 
+// Redirect jika sudah login
 if (isset($_SESSION['log'])) {
     if ($_SESSION['role'] === 'admin') {
         header('Location: admin/dashboard.php');
@@ -25,29 +26,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    $stmt = mysqli_prepare($koneksi, "SELECT * FROM users WHERE email = ?");
-    mysqli_stmt_bind_param($stmt, "s", $email);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+    $stmt = $koneksi->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if ($result && mysqli_num_rows($result) > 0) {
-        $data = mysqli_fetch_assoc($result);
-
+    if ($result && $data = $result->fetch_assoc()) {
         if ($data['is_locked']) {
             $message = "⚠️ Akun Anda dikunci karena terlalu banyak percobaan login gagal.<br>
-                <a href='user/kirim-unlock-link.php?email=" . urlencode($email) . "'>Klik di sini untuk buka blokir via email</a>";
+                <a href='user/reset-request.php?email=" . urlencode($email) . "'>Klik di sini untuk reset password via email</a>";
             $messageType = "error";
         } elseif (password_verify($password, $data['password'])) {
+            // Reset percobaan login
             $stmt = $koneksi->prepare("UPDATE users SET login_attempts = 0, is_locked = 0 WHERE userid = ?");
             $stmt->bind_param("i", $data['userid']);
             $stmt->execute();
 
+            // Set session
             $_SESSION['log'] = true;
             $_SESSION['userid'] = $data['userid'];
             $_SESSION['email'] = $data['email'];
             $_SESSION['role'] = $data['role'];
-            $_SESSION['nama'] = $data['name']; // agar bisa dipakai di log
-            $_SESSION['last_active'] = time(); // ⏱️ tracking waktu aktif
+            $_SESSION['nama'] = $data['name'];
+            $_SESSION['last_active'] = time();
 
             simpan_log($koneksi, $data['userid'], $data['name'], 'Login berhasil');
 
@@ -59,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             exit;
         } else {
+            // Gagal login
             $attempts = $data['login_attempts'] + 1;
             $is_locked = $attempts >= 3 ? 1 : 0;
 
@@ -66,12 +68,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("iii", $attempts, $is_locked, $data['userid']);
             $stmt->execute();
 
+            simpan_log($koneksi, $data['userid'], $data['name'], "Login gagal (ke-$attempts)");
+
             if ($is_locked) {
+                simpan_log($koneksi, $data['userid'], $data['name'], "Akun dikunci otomatis");
                 $message = "⚠️ Akun Anda telah dikunci karena 3 kali login gagal.<br>
-                    <a href='user/kirim-unlock-link.php?email=" . urlencode($email) . "'>Klik di sini untuk buka blokir via email</a>";
+                    <a href='user/reset-request.php?email=" . urlencode($email) . "'>Klik di sini untuk reset password via email</a>";
             } else {
                 $message = "Email atau password salah! Percobaan ke-{$attempts}.";
             }
+
             $messageType = "error";
         }
     } else {
@@ -84,8 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Login</title>
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -114,10 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
             <div class="extra">
-                <label>
-                    <input type="checkbox" name=""> Ingat saya
-                </label>
-                <a href="#">Lupa password</a>
+                <label><input type="checkbox" name=""> Ingat saya</label>
+                <a href="user/reset-request.php">Lupa password?</a>
             </div>
             <button type="submit" class="btnLogin">Login</button>
             <div class="registrasi">
