@@ -4,8 +4,8 @@ date_default_timezone_set('Asia/Jakarta');
 
 // Konfigurasi database
 $host   = 'localhost';
-$user   = 'root';
-$pass   = '';
+$user   = 'sagara';
+$pass   = 'S4g4r4@w4tch';
 $db     = 'sistem_desa';
 
 // Membuat koneksi ke database dengan pengecekan error
