@@ -159,39 +159,117 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
         <p class="text-end"><strong>– Bapak Yanyan, Kepala Desa</strong></p>
     </div>
 
-    <div class="mt-5">
-        <h4 class="text-center mb-4">Struktur Organisasi Pemerintahan Desa</h4>
-        <div class="tree">
+   <div class="tree">
+    <ul>
+        <li>
+            <a href="#" class="struktur-clickable"
+               data-nama="King Yanyan"
+               data-foto=""
+               data-quote="Saya siap membangun desa dengan hati dan integritas.">
+               Kepala Desa<br><small>King Yanyan</small>
+            </a>
             <ul>
                 <li>
-                    <a href="#">Kepala Desa<br><small>King Yanyan</small></a>
+                    <a href="#" class="struktur-clickable"
+                       data-nama="King Rojak"
+                       data-foto=""
+                       data-quote="Administrasi adalah fondasi pemerintahan yang tertib.">
+                       Sekretaris Desa<br><small>King Rojak</small>
+                    </a>
                     <ul>
                         <li>
-                            <a href="#">Sekretaris Desa<br><small>King Rojak</small></a>
-                            <ul>
-                                <li><a href="#">Bendahara<br><small>King Yanyan</small></a></li>
-                                <li><a href="#">Kaur Umum<br><small>King Rojak</small></a></li>
-                            </ul>
+                            <a href="#" class="struktur-clickable"
+                               data-nama="King Yanyan"
+                               data-foto=""
+                               data-quote="Setiap rupiah harus bisa dipertanggungjawabkan.">
+                               Bendahara<br><small>King Yanyan</small>
+                            </a>
                         </li>
                         <li>
-                            <a href="#">Kepala Dusun 1<br><small>King Yanyan</small></a>
-                            <ul>
-                                <li><a href="#">RT 01<br><small>King Rojak</small></a></li>
-                                <li><a href="#">RT 02<br><small>King Yanyan</small></a></li>
-                            </ul>
+                            <a href="#" class="struktur-clickable"
+                               data-nama="King Rojak"
+                               data-foto=""
+                               data-quote="Pelayanan cepat, warga puas.">
+                               Kaur Umum<br><small>King Rojak</small>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="struktur-clickable"
+                       data-nama="King Yanyan"
+                       data-foto=""
+                       data-quote="Saya dekat dengan warga Dusun 1.">
+                       Kepala Dusun 1<br><small>King Yanyan</small>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="#" class="struktur-clickable"
+                               data-nama="King Rojak"
+                               data-foto=""
+                               data-quote="RT adalah ujung tombak desa.">
+                               RT 01<br><small>King Rojak</small>
+                            </a>
                         </li>
                         <li>
-                            <a href="#">Kepala Dusun 2<br><small>King Yanyan</small></a>
-                            <ul>
-                                <li><a href="#">RT 03<br><small>King Rojak</small></a></li>
-                                <li><a href="#">RT 04<br><small>King Yanyan</small></a></li>
-                            </ul>
+                            <a href="#" class="struktur-clickable"
+                               data-nama="King Yanyan"
+                               data-foto=""
+                               data-quote="Bersama wargaku, membangun lingkungan.">
+                               RT 02<br><small>King Yanyan</small>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="struktur-clickable"
+                       data-nama="King Yanyan"
+                       data-foto=""
+                       data-quote="Saya mendengar dan melayani Dusun 2.">
+                       Kepala Dusun 2<br><small>King Yanyan</small>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="#" class="struktur-clickable"
+                               data-nama="King Rojak"
+                               data-foto=""
+                               data-quote="Kami jaga gotong royong warga.">
+                               RT 03<br><small>King Rojak</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="struktur-clickable"
+                               data-nama="King Yanyan"
+                               data-foto=""
+                               data-quote="RT 04 siap jadi teladan bagi desa.">
+                               RT 04<br><small>King Yanyan</small>
+                            </a>
                         </li>
                     </ul>
                 </li>
             </ul>
-        </div>
+        </li>
+    </ul>
+</div>
+<!-- Modal Detail Struktur -->
+<div class="modal fade" id="strukturModal" tabindex="-1" aria-labelledby="strukturModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="strukturModalLabel">Detail Pejabat</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="strukturFoto" src="" alt="Foto" class="img-fluid rounded mb-3" style="max-height: 200px;">
+        <blockquote class="blockquote">
+          <p id="strukturQuote" class="mb-0"></p>
+          <footer class="blockquote-footer mt-2" id="strukturNama"></footer>
+        </blockquote>
+      </div>
     </div>
+  </div>
+</div>
+
 
     <footer class="mt-5 text-center text-muted">
         <hr>
@@ -208,5 +286,24 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
     });
 </script>
 <script src="js/user.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.querySelectorAll('.struktur-clickable').forEach(item => {
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const foto = this.getAttribute('data-foto');
+        const nama = this.getAttribute('data-nama');
+        const quote = this.getAttribute('data-quote');
+
+        document.getElementById('strukturFoto').src = foto;
+        document.getElementById('strukturNama').textContent = nama;
+        document.getElementById('strukturQuote').textContent = quote;
+
+        const modal = new bootstrap.Modal(document.getElementById('strukturModal'));
+        modal.show();
+    });
+});
+</script>
+
 </body>
 </html>

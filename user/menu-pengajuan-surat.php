@@ -9,7 +9,7 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
 }
 
  // Panggil log
-        simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim laporan bencana');
+        simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim surat pengajuan');
 
 $user_id = $_SESSION['userid'];
 $nama_user = $_SESSION['nama'] ?? 'Warga';
@@ -134,7 +134,7 @@ $result = mysqli_query($koneksi, "SELECT * FROM pengajuan_surat WHERE userid = $
                 <td>
                     <?php
                         $status = strtolower($row['status']);
-                        if ($status == 'menunggu') {
+                        if(trim($row['status']) == 'Menunggu') {
                             echo '<span class="badge bg-secondary">Belum Diperiksa</span>';
                         } elseif ($status == 'disetujui') {
                             echo '<span class="badge bg-success">Disetujui</span>';

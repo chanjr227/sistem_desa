@@ -41,7 +41,7 @@ $result = $koneksi->query("SELECT * FROM pengajuan_surat ORDER BY tanggal_pengaj
             <td><?= $row['status'] ?></td>
             <td>
                 <?php if ($row['status'] == 'Menunggu') { ?>
-                    <a href="ubah_status.php?id=<?= $row['id'] ?>&status=Disetujui" class="btn btn-success btn-sm">Setujui</a>
+                    <a href="ubah_status.php?id=<?= $row['id'] ?>&status=Disetujui&redirect=cetak" class="btn btn-success btn-sm">Setujui</a>
                     <a href="ubah_status.php?id=<?= $row['id'] ?>&status=Ditolak" class="btn btn-danger btn-sm">Tolak</a>
                 <?php } else { ?>
                     <span class="badge bg-secondary"><?= $row['status'] ?></span>
