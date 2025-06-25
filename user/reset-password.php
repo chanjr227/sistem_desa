@@ -37,39 +37,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Reset Password Baru</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Google Fonts + Bootstrap -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            background-color: #fff;
+            padding: 2rem;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        h4 {
+            font-weight: 600;
+        }
+
+        .form-control {
+            border-radius: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+        }
+
+        .alert {
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
-<body class="bg-light d-flex align-items-center justify-content-center" style="height: 100vh;">
-    <div class="card p-4 shadow" style="max-width: 400px;">
+<body>
+
+    <div class="card">
         <?php if ($success): ?>
-            <h4 class="text-success mb-3">✅ Password berhasil diubah!</h4>
-            <a href="../login.php" class="btn btn-success w-100">➡️ Kembali ke Login</a>
+            <div class="text-center">
+                <h4 class="text-success mb-3">✅ Password berhasil diubah!</h4>
+                <a href="../login.php" class="btn btn-success w-100">➡️ Kembali ke Login</a>
+            </div>
         <?php elseif ($user): ?>
-            <h4 class="mb-3">🔐 Atur Password Baru</h4>
+            <h4 class="mb-3 text-center">🔐 Atur Password Baru</h4>
             <?php if ($error): ?>
                 <div class="alert alert-danger"><?= $error ?></div>
             <?php endif; ?>
             <form method="POST">
                 <div class="mb-3">
-                    <label>Password Baru</label>
-                    <input type="password" name="password" class="form-control" required minlength="6">
+                    <label for="password" class="form-label">Password Baru</label>
+                    <input type="password" name="password" id="password" class="form-control" required minlength="6">
                 </div>
                 <div class="mb-3">
-                    <label>Ulangi Password</label>
-                    <input type="password" name="confirm" class="form-control" required minlength="6">
+                    <label for="confirm" class="form-label">Ulangi Password</label>
+                    <input type="password" name="confirm" id="confirm" class="form-control" required minlength="6">
                 </div>
                 <button class="btn btn-primary w-100">Reset Password</button>
             </form>
         <?php else: ?>
-            <div class="alert alert-danger"><?= $error ?></div>
-            <a href="reset-request.php" class="btn btn-secondary w-100 mt-2">← Minta Link Baru</a>
+            <div class="alert alert-danger text-center"><?= $error ?></div>
+            <a href="reset-request.php" class="btn btn-outline-light bg-secondary text-white w-100 mt-3">← Minta Link Baru</a>
         <?php endif; ?>
     </div>
+
 </body>
 </html>

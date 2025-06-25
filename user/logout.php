@@ -1,5 +1,6 @@
 <?php
 session_start();
+require '../helpers/log_helpers.php';
 
 // Hapus semua data session
 $_SESSION = [];
