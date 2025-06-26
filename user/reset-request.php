@@ -82,8 +82,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Email Anda</label>
                 <input type="email" name="email" class="form-control" required autofocus>
             </div>
-            <button class="btn btn-primary w-100">Kirim Link Reset</button>
+            <button class="btn btn-primary w-100" type="submit" id="btnReset">
+    Kirim Link Reset
+</button>
         </form>
+        <p class="text-muted small mt-2">
+  Kami akan mengirimkan link untuk reset password jika email Anda terdaftar.
+</p>
+
     </div>
+    <script>
+document.querySelector('form').addEventListener('submit', () => {
+    const btn = document.getElementById('btnReset');
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Mengirim...`;
+});
+</script>
 </body>
 </html>

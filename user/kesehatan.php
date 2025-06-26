@@ -9,7 +9,7 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
 
 $nama_user = $_SESSION['nama'] ?? 'Warga';
 
-// ✅ Ambil data jadwal posyandu
+// Ambil data jadwal posyandu
 $jadwal_posyandu = [];
 $query = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER BY tanggal ASC");
 
@@ -29,28 +29,29 @@ if ($query && mysqli_num_rows($query) > 0) {
 </head>
 <body class="bg-light">
 
-<!-- ✅ NAVBAR -->
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-primary text-white px-4 py-2">
-    <div class="container-fluid flex justify-between items-center">
-        <a class="navbar-brand text-white font-bold" href="../index.php">Sistem Informasi Desa</a>
-        <div class="flex items-center space-x-2">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <a class="navbar-brand text-white fw-bold" href="../index.php">Sistem Informasi Desa</a>
+        <div class="d-flex align-items-center gap-2">
             <span class="text-white">Halo, <?= htmlspecialchars($nama_user) ?></span>
-            <a href="../index.php" class="bg-white text-primary px-3 py-1 rounded hover:bg-blue-100 transition text-sm">← Kembali</a>
-            <a href="logout.php" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition text-sm">Logout</a>
+            <a href="../index.php" class="btn btn-sm btn-light text-primary">← Kembali</a>
+            <a href="logout.php" class="btn btn-sm btn-danger">Logout</a>
         </div>
     </div>
 </nav>
 
-<!-- ✅ KONTEN -->
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Fitur Kesehatan Desa</h2>
+<!-- Konten -->
+<div class="container my-5">
+    <h2 class="mb-4 text-center fw-bold">📅 Jadwal Posyandu Desa</h2>
 
-    <!-- ✅ Jadwal Posyandu -->
-    <div class="card mb-4">
-        <div class="card-header bg-success text-white">Jadwal Posyandu</div>
-        <div class="card-body">
-            <table class="table table-bordered">
-                <thead>
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white fw-semibold">
+            Jadwal Posyandu Terdekat
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead class="table-light">
                     <tr>
                         <th>Tanggal</th>
                         <th>Lokasi</th>
@@ -61,7 +62,7 @@ if ($query && mysqli_num_rows($query) > 0) {
                     <?php if (!empty($jadwal_posyandu)): ?>
                         <?php foreach ($jadwal_posyandu as $jadwal): ?>
                             <tr>
-                                <td><?= htmlspecialchars($jadwal['tanggal']) ?></td>
+                                <td><?= date('d M Y', strtotime($jadwal['tanggal'])) ?></td>
                                 <td><?= htmlspecialchars($jadwal['lokasi']) ?></td>
                                 <td><?= htmlspecialchars($jadwal['waktu']) ?></td>
                             </tr>
@@ -75,7 +76,6 @@ if ($query && mysqli_num_rows($query) > 0) {
             </table>
         </div>
     </div>
-
 </div>
 </body>
 </html>

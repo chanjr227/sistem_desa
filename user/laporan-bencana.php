@@ -65,10 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-         // Panggil log
-        simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim laporan bencana');
 
         if (!$error) {
+              // Panggil log
+        simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim laporan bencana');
             $stmt = $koneksi->prepare("INSERT INTO laporan (userid, nama_pelapor, jenis_bencana, deskripsi, tanggal_laporan, kota, lokasi, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("isssssss", $userid, $nama_pelapor, $jenis_bencana, $deskripsi, $tanggal, $kota, $lokasi, $foto_nama);
 

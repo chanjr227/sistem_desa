@@ -15,6 +15,7 @@ if ($token) {
 
     if (!$user || strtotime($user['token_expiry']) < time()) {
         $error = "❌ Token tidak valid atau sudah kedaluwarsa.";
+        $user = null; // Hindari penggunaan data user tidak valid
     }
 } else {
     $error = "❌ Token tidak ditemukan.";
@@ -22,7 +23,7 @@ if ($token) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user) {
     $password = $_POST['password'] ?? '';
-    $confirm = $_POST['confirm'] ?? '';
+    $confirm  = $_POST['confirm'] ?? '';
 
     if (strlen($password) < 6) {
         $error = "❌ Password minimal 6 karakter.";
@@ -87,8 +88,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user) {
             background-color: #2e59d9;
         }
 
-        .alert {
-            font-size: 0.9rem;
+        .toggle-pass {
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #6c757d;
+            display: inline-block;
+            margin-top: -10px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -103,24 +109,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user) {
         <?php elseif ($user): ?>
             <h4 class="mb-3 text-center">🔐 Atur Password Baru</h4>
             <?php if ($error): ?>
-                <div class="alert alert-danger"><?= $error ?></div>
+                <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
-            <form method="POST">
+            <form method="POST" id="resetForm">
                 <div class="mb-3">
                     <label for="password" class="form-label">Password Baru</label>
                     <input type="password" name="password" id="password" class="form-control" required minlength="6">
+                    <span class="toggle-pass" onclick="togglePassword('password')">👁️ Tampilkan</span>
                 </div>
                 <div class="mb-3">
                     <label for="confirm" class="form-label">Ulangi Password</label>
                     <input type="password" name="confirm" id="confirm" class="form-control" required minlength="6">
+                    <span class="toggle-pass" onclick="togglePassword('confirm')">👁️ Tampilkan</span>
                 </div>
-                <button class="btn btn-primary w-100">Reset Password</button>
+                <button class="btn btn-primary w-100" id="submitBtn">Reset Password</button>
             </form>
         <?php else: ?>
-            <div class="alert alert-danger text-center"><?= $error ?></div>
+            <div class="alert alert-danger text-center"><?= htmlspecialchars($error) ?></div>
             <a href="reset-request.php" class="btn btn-outline-light bg-secondary text-white w-100 mt-3">← Minta Link Baru</a>
         <?php endif; ?>
     </div>
 
+<script>
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    field.type = field.type === "password" ? "text" : "password";
+}
+
+document.getElementById('resetForm')?.addEventListener('submit', function () {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Mengubah...`;
+});
+</script>
 </body>
 </html>

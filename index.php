@@ -19,6 +19,7 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard Desa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link href="css/user.css" rel="stylesheet" />
     <link href="css/hero.css" rel="stylesheet" />
 </head>
@@ -74,7 +75,7 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
         <div class="col-12 col-md-4">
             <div class="card border-primary card-menu-animate">
                 <div class="card-body">
-                    <h5 class="card-title">Laporan Bencana</h5>
+                    <h5 class="card-title"><i class="fa-solid fa-triangle-exclamation text-danger me-2"></i> Laporan Bencana</h5>
                     <p class="card-text">Laporkan kejadian bencana alam yang Anda saksikan.</p>
                     <a href="user/laporan-bencana.php" class="btn btn-primary">Laporkan Sekarang</a>
                 </div>
@@ -84,7 +85,7 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
         <div class="col-12 col-md-4">
             <div class="card border-success card-menu-animate">
                 <div class="card-body">
-                    <h5 class="card-title">Pengajuan Surat</h5>
+                    <h5 class="card-title"><i class="fa-solid fa-file-lines text-success me-2"></i> Pengajuan Surat</h5>
                     <p class="card-text">Ajukan surat pengantar KTP, KK, dan lainnya secara online.</p>
                     <a href="user/menu-pengajuan-surat.php" class="btn btn-success">Ajukan Surat</a>
                 </div>
@@ -94,7 +95,7 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
         <div class="col-12 col-md-4">
             <div class="card border-info card-menu-animate">
                 <div class="card-body">
-                    <h5 class="card-title">Kesehatan Desa</h5>
+                    <h5 class="card-title"><i class="fa-solid fa-heart-pulse text-info me-2"></i> Kesehatan Desa</h5>
                     <p class="card-text">Lihat jadwal posyandu, warga rentan, dan imunisasi desa Anda.</p>
                     <a href="user/kesehatan.php" class="btn btn-info text-white">Lihat Kesehatan</a>
                 </div>
@@ -163,86 +164,86 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
     <ul>
         <li>
             <a href="#" class="struktur-clickable"
-               data-nama="King Yanyan"
-               data-foto=""
+               data-nama="Yanyan julyandi"
+               data-foto="aset/yanyan2.jpg"
                data-quote="Saya siap membangun desa dengan hati dan integritas.">
-               Kepala Desa<br><small>King Yanyan</small>
+               Kepala Desa<br><small>Yanyan julyandi</small>
             </a>
             <ul>
                 <li>
                     <a href="#" class="struktur-clickable"
-                       data-nama="King Rojak"
-                       data-foto=""
+                       data-nama="Bintang rogerman"
+                       data-foto="aset/rojak2.jpg"
                        data-quote="Administrasi adalah fondasi pemerintahan yang tertib.">
-                       Sekretaris Desa<br><small>King Rojak</small>
+                       Sekretaris Desa<br><small>Bintang rogerman</small>
                     </a>
                     <ul>
                         <li>
                             <a href="#" class="struktur-clickable"
-                               data-nama="King Yanyan"
-                               data-foto=""
+                               data-nama="Bintang rogerman"
+                               data-foto="aset/rojak2.jpg"
                                data-quote="Setiap rupiah harus bisa dipertanggungjawabkan.">
-                               Bendahara<br><small>King Yanyan</small>
+                               Bendahara<br><small>Bintang rogerman</small>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="struktur-clickable"
-                               data-nama="King Rojak"
-                               data-foto=""
+                               data-nama="M. Yusuf"
+                               data-foto="aset/ucup.jpg"
                                data-quote="Pelayanan cepat, warga puas.">
-                               Kaur Umum<br><small>King Rojak</small>
+                               Kaur Umum<br><small>M. Yusuf</small>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li>
                     <a href="#" class="struktur-clickable"
-                       data-nama="King Yanyan"
-                       data-foto=""
+                       data-nama="Yanyan Julyandi"
+                       data-foto="aset/yanyan2.jpg"
                        data-quote="Saya dekat dengan warga Dusun 1.">
-                       Kepala Dusun 1<br><small>King Yanyan</small>
+                       Kepala Dusun 1<br><small>Yanyan julyandi</small>
                     </a>
                     <ul>
                         <li>
                             <a href="#" class="struktur-clickable"
-                               data-nama="King Rojak"
-                               data-foto=""
+                               data-nama="M . Yusuf"
+                               data-foto="aset/ucup.jpg"
                                data-quote="RT adalah ujung tombak desa.">
-                               RT 01<br><small>King Rojak</small>
+                               RT 01<br><small>M. Yusuf</small>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="struktur-clickable"
-                               data-nama="King Yanyan"
-                               data-foto=""
+                               data-nama="Bintang Rogerman"
+                               data-foto="aset/rojak2.jpg"
                                data-quote="Bersama wargaku, membangun lingkungan.">
-                               RT 02<br><small>King Yanyan</small>
+                               RT 02<br><small>Bintang rogerman</small>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li>
                     <a href="#" class="struktur-clickable"
-                       data-nama="King Yanyan"
-                       data-foto=""
+                       data-nama="M. Yusuf"
+                       data-foto="aset/ucup.jpg"
                        data-quote="Saya mendengar dan melayani Dusun 2.">
-                       Kepala Dusun 2<br><small>King Yanyan</small>
+                       Kepala Dusun 2<br><small>M. Yusuf</small>
                     </a>
                     <ul>
                         <li>
                             <a href="#" class="struktur-clickable"
-                               data-nama="King Rojak"
-                               data-foto=""
+                               data-nama="Bintang Rogerman"
+                               data-foto="aset/rojak2.jpg"
                                data-quote="Kami jaga gotong royong warga.">
-                               RT 03<br><small>King Rojak</small>
+                               RT 03<br><small>Bintang rogerman</small>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="struktur-clickable"
-                               data-nama="King Yanyan"
-                               data-foto=""
+                               data-nama="M. Yusuf"
+                               data-foto="aset/ucup.jpg"
                                data-quote="RT 04 siap jadi teladan bagi desa.">
-                               RT 04<br><small>King Yanyan</small>
+                               RT 04<br><small>M. Yusuf</small>
                             </a>
                         </li>
                     </ul>

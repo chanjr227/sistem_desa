@@ -15,11 +15,8 @@ $update = mysqli_query($koneksi, "UPDATE pengajuan_surat SET status='$status' WH
 
 if ($update) {
     if ($status == 'Disetujui' && $redirect == 'cetak') {
-        // Jika status Disetujui dan minta redirect ke cetak
-        echo "<script>
-            window.open('cetak-surat.php?id=$id', '_blank');
-            window.location.href = 'pengajuan-surat-admin.php?pesan=berhasil';
-        </script>";
+    header("Location: redirect-cetak.php?id=$id");
+    exit;
     } else {
         header("Location: pengajuan-surat-admin.php?pesan=berhasil");
     }

@@ -1,13 +1,37 @@
-<?php
+\<?php
 require 'config/config.php';
+session_start();
+
+// Redirect jika sudah login
+if (isset($_SESSION['log'])) {
+    header("Location: index.php");
+    exit;
+}
+
+// Generate CSRF token
+if (empty($_SESSION['csrf'])) {
+    $_SESSION['csrf'] = bin2hex(random_bytes(32));
+}
+
+$error = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['nama'] ?? '';
-    $email = $_POST['email'] ?? '';
+    // Validasi CSRF token
+    if (!isset($_POST['csrf']) || !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
+        die("⚠️ Permintaan tidak valid (CSRF).");
+    }
+
+    // Ambil & validasi input
+    $nama = htmlspecialchars(trim($_POST['nama'] ?? ''));
+    $email = filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL);
     $password = $_POST['password'] ?? '';
     $password_confirm = $_POST['password_confirm'] ?? '';
 
-    if ($password !== $password_confirm) {
+    if (!$email) {
+        $error = "Email tidak valid.";
+    } elseif (strlen($password) < 8) {
+        $error = "Password minimal 8 karakter.";
+    } elseif ($password !== $password_confirm) {
         $error = "Password dan konfirmasi tidak cocok!";
     } else {
         $check = $koneksi->prepare("SELECT email FROM users WHERE email = ?");
@@ -28,7 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: login.php?register=success");
                 exit();
             } else {
-                $error = "Gagal registrasi: " . $koneksi->error;
+                // Hindari tampilkan detail kesalahan database ke user
+                $error = "Terjadi kesalahan saat registrasi. Silakan coba lagi.";
             }
             $stmt->close();
         }
@@ -39,19 +64,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Registrasi</title>
-    <link rel="stylesheet" href="css/login.css"> <!-- Sama seperti login -->
+    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
     <div class="box">
-        <form method="POST">
+        <form method="POST" autocomplete="off">
             <h1>Registrasi</h1>
 
-            <?php if (isset($error)): ?>
-                <div class="alert error"><?= $error ?></div>
+            <?php if ($error): ?>
+                <div class="alert error"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
 
             <div class="input-box">
@@ -68,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="input-box">
                 <input type="password" name="password" required>
-                <label>Password</label>
+                <label>Password (min 8 karakter)</label>
                 <i class="fa-solid fa-lock"></i>
             </div>
 
@@ -77,6 +102,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label>Konfirmasi Password</label>
                 <i class="fa-solid fa-lock"></i>
             </div>
+
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
 
             <button type="submit" class="btnLogin">Daftar</button>
 
