@@ -11,6 +11,21 @@ $jumlah_penduduk = $row['total'];
 
 $jadwal_kegiatan_umum = mysqli_query($koneksi, "SELECT * FROM jadwal_kegiatan ORDER BY tanggal DESC LIMIT 3");
 $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER BY tanggal DESC LIMIT 3");
+
+$statistik_tahun = [];
+$statistik_jumlah = [];
+
+$sql = "SELECT YEAR(tanggal_lahir) AS tahun, COUNT(*) AS jumlah 
+        FROM penduduk 
+        GROUP BY tahun 
+        ORDER BY tahun ASC";
+$query = mysqli_query($koneksi, $sql);
+
+while ($row = mysqli_fetch_assoc($query)) {
+    $statistik_tahun[] = $row['tahun'];
+    $statistik_jumlah[] = $row['jumlah'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -58,23 +73,37 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
 <div class="container mt-5">
     <h2 class="mb-4">Dashboard Utama</h2>
 
-    <div class="row g-4">
-        <div class="col-12 col-md-6">
-            <div class="card shadow-sm">
+    <div class="col-12">
+    <div class="card shadow-sm p-4">
+        <div class="row align-items-center">
+            <!-- Kiri: Profil Desa -->
+            <div class="card shadow-sm p-4 mb-4">
+    <div class="d-flex align-items-center mb-3">
+        <i class="fa-solid fa-map-location-dot fa-2x text-primary me-3"></i>
+        <h5 class="mb-0 text-primary fw-bold">Profil Desa Rajeg</h5>
+    </div>
+    <p class="mb-1"><strong>Alamat:</strong></p>
+    <p class="text-muted">
+        Desa Rajeg, Kecamatan Rajeg,<br>
+        Kabupaten Tangerang, Provinsi Banten.
+    </p>
+    <p class="text-secondary" style="font-size: 0.9rem;">
+        Terletak di wilayah strategis, Desa Rajeg terus berkembang menuju desa digital
+        yang maju, transparan, dan inklusif bagi seluruh warganya.
+    </p>
+
+
+            <!-- Kanan: Grafik -->
+            <div class="card mt-5 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">Profil Desa</h5>
-                    <p class="card-text">Desa Rajeg, Kecamatan Harapan, Kabupaten Maju Jaya, Provinsi Jawa Sejahtera.</p>
+                    <h5 class="card-title">📊 Statistik Penduduk</h5>
+                    <canvas id="pendudukChart" height="100"></canvas>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Jumlah Penduduk</h5>
-                    <p class="card-text"><?= $jumlah_penduduk ?> jiwa</p>
-                </div>
-            </div>
-        </div>
+    </div>
+</div>
+
 
     <div class="layanan-cepat p-4 text-center bg-white shadow rounded-3 mt-4 mx-1">
     <h4 class="text-primary mb-4"><i class="fa-solid fa-bolt"></i> Layanan Cepat</h4>
@@ -118,11 +147,11 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
 
         <!-- Surat KTP/KK -->
         <div class="col-6 col-md-3">
-            <a href="user/surat-ktp-kk.php" class="text-decoration-none text-dark">
+            <a href="user/pengaduan-kinerja.php" class="text-decoration-none text-dark">
                 <div class="card h-100 shadow-sm border-0 hover-shadow">
                     <div class="card-body">
                         <i class="fa-solid fa-id-card fa-2x text-primary mb-2"></i>
-                        <p class="fw-bold mb-0">Surat KTP/KK</p>
+                        <p class="fw-bold mb-0">Laporan pengaduan</p>
                     </div>
                 </div>
             </a>
@@ -334,6 +363,49 @@ document.querySelectorAll('.struktur-clickable').forEach(item => {
     });
 });
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('pendudukChart').getContext('2d');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: <?= json_encode($statistik_tahun) ?>,
+        datasets: [{
+            label: 'Jumlah Penduduk',
+            data: <?= json_encode($statistik_jumlah) ?>,
+            backgroundColor: 'rgba(13, 110, 253, 0.5)',
+            borderColor: '#0d6efd',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    label: ctx => `${ctx.parsed.y} jiwa`
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Jumlah Jiwa'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Tahun Lahir'
+                }
+            }
+        }
+    }
+});
+</script>
 </body>
 </html>
