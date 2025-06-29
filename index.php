@@ -225,7 +225,7 @@ while ($row = mysqli_fetch_assoc($query)) {
                data-nama="Yanyan julyandi"
                data-foto="aset/yanyan2.jpg"
                data-quote="Saya siap membangun desa dengan hati dan integritas.">
-               Kepala Desa<br><small>Yanyan julyandi</small>
+               Lurah<br><small>Yanyan julyandi</small>
             </a>
             <ul>
                 <li>
@@ -258,8 +258,8 @@ while ($row = mysqli_fetch_assoc($query)) {
                     <a href="#" class="struktur-clickable"
                        data-nama="Yanyan Julyandi"
                        data-foto="aset/yanyan2.jpg"
-                       data-quote="Saya dekat dengan warga Dusun 1.">
-                       Kepala Dusun 1<br><small>Yanyan julyandi</small>
+                       data-quote="Saya dekat dengan warga RW 1.">
+                       RW 01<br><small>Yanyan julyandi</small>
                     </a>
                     <ul>
                         <li>
@@ -284,8 +284,8 @@ while ($row = mysqli_fetch_assoc($query)) {
                     <a href="#" class="struktur-clickable"
                        data-nama="M. Yusuf"
                        data-foto="aset/ucup.jpg"
-                       data-quote="Saya mendengar dan melayani Dusun 2.">
-                       Kepala Dusun 2<br><small>M. Yusuf</small>
+                       data-quote="Saya mendengar dan melayani RW 2.">
+                       RW 02<br><small>M. Yusuf</small>
                     </a>
                     <ul>
                         <li>
