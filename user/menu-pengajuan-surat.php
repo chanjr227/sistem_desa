@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../config/config.php';
+require '../helpers/log_helpers.php';
 
 
 if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
@@ -8,7 +9,8 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
     exit;
 }
 
-
+ // Panggil log
+        simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim surat pengajuan');
 
 $user_id = $_SESSION['userid'];
 $nama_user = $_SESSION['nama'] ?? 'Warga';

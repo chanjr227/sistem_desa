@@ -1,8 +1,7 @@
 <?php
 require '../config/config.php';
 require '../helpers/log_helpers.php';
- // Panggil log
-        simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim surat pengajuan');
+
 
 // Validasi dan sanitasi input
 $user_id        = $_POST['user_id'] ?? '';

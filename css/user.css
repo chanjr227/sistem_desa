@@ -1,4 +1,4 @@
-/* assets/css/dashboard.css */
+/* ===== Animasi Umum ===== */
 .fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -10,6 +10,7 @@
   transform: translateY(0);
 }
 
+/* ===== Box Sambutan ===== */
 .sambutan-box {
   background-color: #f8f9fa;
   padding: 20px;
@@ -24,6 +25,18 @@
 .sambutan-box.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ===== Card Hover Effect Umum ===== */
+.card:hover {
+  transform: scale(1.03);
+  transition: all 0.3s ease-in-out;
+}
+
+/* ===== Struktur Organisasi Tree ===== */
+.tree {
+  overflow-x: auto;
+  padding-bottom: 1rem;
 }
 
 .tree * {
@@ -47,7 +60,6 @@
   transition: all 0.5s;
 }
 
-/* Gambar garis vertikal dan horizontal */
 .tree li::before,
 .tree li::after {
   content: "";
@@ -70,10 +82,6 @@
   display: none;
 }
 
-.tree li:only-child {
-  padding-top: 0;
-}
-
 .tree li:first-child::before,
 .tree li:last-child::after {
   border: 0 none;
@@ -88,7 +96,6 @@
   border-radius: 5px 0 0 0;
 }
 
-/* Kotak orang */
 .tree a {
   border: 1px solid #007bff;
   padding: 10px 12px;
@@ -113,7 +120,7 @@
   color: white;
 }
 
-/* user.css */
+/* ===== Animasi Kartu Menu ===== */
 .card-menu-animate {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
@@ -124,27 +131,21 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* ===== Notifikasi Toast Login ===== */
 .toast-notif {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  /* background-color: #2e8b2e; */
+  top: 1rem;
+  right: 1rem;
   color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
+  padding: 1rem;
+  border-radius: 5px;
+  z-index: 1000;
+  animation: fadein 0.5s ease-in-out, fadeout 0.5s 3.5s ease-in-out forwards;
   font-size: 14px;
-  opacity: 0;
-  animation: fadein 0.5s forwards, fadeout 0.5s 3.5s forwards;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.btn:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease-in-out;
-}
-
+/* ===== Modal Struktur Organisasi ===== */
 #strukturModal .modal-body img,
 #strukturModal .modal-body blockquote {
   opacity: 0;
@@ -158,12 +159,7 @@
   transform: translateY(0);
 }
 
-.card-menu-animate:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-  transition: 0.3s ease;
-}
-
+/* ===== Animasi Fade In/Out ===== */
 @keyframes fadein {
   from {
     opacity: 0;
@@ -186,7 +182,7 @@
   }
 }
 
-/* Responsive customizations */
+/* ===== Responsive Styling ===== */
 @media (max-width: 768px) {
   .hero-title {
     font-size: 2rem;
@@ -209,91 +205,4 @@
   .navbar-text {
     font-size: 0.9rem;
   }
-}
-
-.tree {
-  overflow-x: auto;
-  padding-bottom: 1rem;
-}
-
-.card-menu-animate {
-  transition: transform 0.3s ease-in-out;
-}
-
-.card-menu-animate:hover {
-  transform: translateY(-5px);
-}
-
-.toast-notif {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  /* background-color: #198754; */
-  color: white;
-  padding: 1rem;
-  border-radius: 5px;
-  z-index: 1000;
-  animation: fadein 0.5s ease-in-out;
-}
-
-@keyframes fadein {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Struktur Organisasi Tree */
-.tree ul {
-  padding-top: 20px;
-  position: relative;
-  display: table;
-  margin: 0 auto;
-}
-
-.tree li {
-  display: table-cell;
-  text-align: center;
-  vertical-align: top;
-  list-style-type: none;
-  padding: 20px;
-  position: relative;
-}
-
-.tree li::before,
-.tree li::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 50%;
-  border-top: 1px solid #ccc;
-  width: 50%;
-  height: 20px;
-}
-
-.tree li::after {
-  right: auto;
-  left: 50%;
-  border-left: 1px solid #ccc;
-}
-
-.tree li:only-child::before,
-.tree li:only-child::after {
-  display: none;
-}
-
-.tree li a {
-  padding: 10px 15px;
-  background-color: #e9f7ef;
-  display: inline-block;
-  border-radius: 8px;
-  text-decoration: none;
-  /* border: 1px solid #8bc34a;
-  color: #2e7d32; */
-  font-weight: bold;
-  font-size: 14px;
 }

@@ -1,4 +1,4 @@
-\<?php
+<?php
 require 'config/config.php';
 session_start();
 
@@ -16,7 +16,7 @@ if (empty($_SESSION['csrf'])) {
 $error = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validasi CSRF token
+    // Cross-Site Request Forgery (CSRF)
     if (!isset($_POST['csrf']) || !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
         die("⚠️ Permintaan tidak valid (CSRF).");
     }
@@ -29,11 +29,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!$email) {
         $error = "Email tidak valid.";
+        //Insecure Design
     } elseif (strlen($password) < 8) {
         $error = "Password minimal 8 karakter.";
     } elseif ($password !== $password_confirm) {
         $error = "Password dan konfirmasi tidak cocok!";
-    } else {
+    } else { // Injection (SQL Injection) 
         $check = $koneksi->prepare("SELECT email FROM users WHERE email = ?");
         $check->bind_param("s", $email);
         $check->execute();
@@ -41,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($check->num_rows > 0) {
             $error = "Email sudah terdaftar!";
-        } else {
+        } else { // Broken Authentication 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             $role = "user";
 
@@ -52,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: login.php?register=success");
                 exit();
             } else {
-                // Hindari tampilkan detail kesalahan database ke user
+                // Hindari tampilkan detail kesalahan database ke user (Security Misconfiguration)
                 $error = "Terjadi kesalahan saat registrasi. Silakan coba lagi.";
             }
             $stmt->close();
@@ -102,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label>Konfirmasi Password</label>
                 <i class="fa-solid fa-lock"></i>
             </div>
-
+            <!--Cross-Site Request Forgery (CSRF) -->
             <!-- CSRF Token -->
             <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
 

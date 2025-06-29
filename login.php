@@ -8,7 +8,7 @@ if (isset($_GET['timeout'])) {
     $message = "⏱️ Sesi Anda telah berakhir karena tidak aktif selama 20 menit.";
     $messageType = "warning";
 }
-
+// Broken Access Control 
 // Redirect jika sudah login
 if (isset($_SESSION['log'])) {
     if ($_SESSION['role'] === 'admin') {
@@ -25,12 +25,12 @@ $messageType = $messageType ?? null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
-
+    //Injection (SQL Injection)
     $stmt = $koneksi->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
-
+    //Broken Authentication – [OWASP A02]
     if ($result && $data = $result->fetch_assoc()) {
         if ($data['is_locked']) {
             $message = "⚠️ Akun Anda dikunci karena terlalu banyak percobaan login gagal.<br>
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role'] = $data['role'];
             $_SESSION['nama'] = $data['name'];
             $_SESSION['last_active'] = time();
-
+            // Security Logging & Monitoring – [OWASP A09]
             simpan_log($koneksi, $data['userid'], $data['name'], 'Login berhasil');
 
             if ($data['role'] === 'admin') {
@@ -60,16 +60,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             exit;
         } else {
-            // Gagal login
+            //Brute Force Protection 
             $attempts = $data['login_attempts'] + 1;
             $is_locked = $attempts >= 3 ? 1 : 0;
 
             $stmt = $koneksi->prepare("UPDATE users SET login_attempts = ?, is_locked = ? WHERE userid = ?");
             $stmt->bind_param("iii", $attempts, $is_locked, $data['userid']);
             $stmt->execute();
-
+            // Security Logging & Monitoring – [OWASP A09]
             simpan_log($koneksi, $data['userid'], $data['name'], "Login gagal (ke-$attempts)");
-
+            // Security Logging & Monitoring – [OWASP A09]
             if ($is_locked) {
                 simpan_log($koneksi, $data['userid'], $data['name'], "Akun dikunci otomatis");
                 $message = "⚠️ Akun Anda telah dikunci karena 3 kali login gagal.<br>

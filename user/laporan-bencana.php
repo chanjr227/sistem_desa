@@ -3,13 +3,13 @@ session_start();
 require '../config/config.php';
 require '../helpers/log_helpers.php';
 
-
+// A01 - Broken Access Control dan Identification and Authentication Failures
 if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
     header('Location: ../login.php');
     exit;
 }
 
-// CSRF token
+// CSRF token Cryptographic Failures
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = "Jenis file tidak diperbolehkan.";
             } elseif ($file_size > 2 * 1024 * 1024) {
                 $error = "Ukuran file maksimal 2MB.";
-            } else {
+            } else { //A05 - Security Misconfiguration
                 $upload_dir = __DIR__ . "/uploads/";
                 if (!file_exists($upload_dir)) mkdir($upload_dir, 0755, true);
 
@@ -67,8 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         if (!$error) {
-              // Panggil log
-        simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim laporan bencana');
+              // Panggil log (A09 - Security Logging and Monitoring Failures)
+            simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim laporan bencana');
+            //A03 - Injection (SQL Injection)
             $stmt = $koneksi->prepare("INSERT INTO laporan (userid, nama_pelapor, jenis_bencana, deskripsi, tanggal_laporan, kota, lokasi, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("isssssss", $userid, $nama_pelapor, $jenis_bencana, $deskripsi, $tanggal, $kota, $lokasi, $foto_nama);
 
@@ -89,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Laporan Bencana</title>
+<!--  A06 - Vulnerable and Outdated Components-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>

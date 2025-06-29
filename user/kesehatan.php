@@ -1,7 +1,7 @@
 <?php
 session_start();
 require '../config/config.php';
-
+//Broken Access Control dan A07: Identification and Authentication Failures
 if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
     header('Location: ../login.php');
     exit;
@@ -9,15 +9,19 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
 
 $nama_user = $_SESSION['nama'] ?? 'Warga';
 
-// Ambil data jadwal posyandu
+// Ambil data jadwal posyandu (OWASP A03: Injection (SQL Injection))
 $jadwal_posyandu = [];
-$query = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER BY tanggal ASC");
+$stmt = $koneksi->prepare("SELECT * FROM jadwal_posyandu ORDER BY tanggal ASC");
+$stmt->execute();
+$result = $stmt->get_result();
 
-if ($query && mysqli_num_rows($query) > 0) {
-    while ($row = mysqli_fetch_assoc($query)) {
+
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
         $jadwal_posyandu[] = $row;
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -25,6 +29,7 @@ if ($query && mysqli_num_rows($query) > 0) {
     <meta charset="UTF-8">
     <title>Kesehatan Desa</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!----OWASP A06: Vulnerable and Outdated Components -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -63,6 +68,7 @@ if ($query && mysqli_num_rows($query) > 0) {
                         <?php foreach ($jadwal_posyandu as $jadwal): ?>
                             <tr>
                                 <td><?= date('d M Y', strtotime($jadwal['tanggal'])) ?></td>
+                                <!----  OWASP A05: Security Misconfiguration -->
                                 <td><?= htmlspecialchars($jadwal['lokasi']) ?></td>
                                 <td><?= htmlspecialchars($jadwal['waktu']) ?></td>
                             </tr>

@@ -1,9 +1,10 @@
 <?php
+//A01: Broken Access Control
 session_start();
 require 'config/config.php';
-
+//A01 + A03 Gunakan default value + tidak bergantung pada input user ( A01: Broken Access Control)
 $nama_user = $_SESSION['nama'] ?? 'Warga';
-
+// A03: Injection (SQL Injection)
 $result = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM penduduk");
 $row = mysqli_fetch_assoc($result);
 $jumlah_penduduk = $row['total'];
@@ -15,9 +16,11 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <!---  A05: Security Misconfiguration -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard Desa</title>
+    <!---A06: Vulnerable and Outdated Components -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link href="css/user.css" rel="stylesheet" />
@@ -37,6 +40,7 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
         <a class="navbar-brand" href="#">Sistem Informasi Desa</a>
         <div class="d-flex flex-wrap align-items-center">
             <span class="navbar-text text-white me-3">Halo, <?= htmlspecialchars($nama_user) ?></span>
+            <!---A07: Identification and Authentication Failures -->
             <?php if (isset($_SESSION['log']) && $_SESSION['log'] === true): ?>
                 <a href="user/logout.php" class="btn btn-outline-light btn-sm">Logout</a>
             <?php else: ?>
@@ -72,36 +76,61 @@ $jadwal_posyandu = mysqli_query($koneksi, "SELECT * FROM jadwal_posyandu ORDER B
             </div>
         </div>
 
-        <div class="col-12 col-md-4">
-            <div class="card border-primary card-menu-animate">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fa-solid fa-triangle-exclamation text-danger me-2"></i> Laporan Bencana</h5>
-                    <p class="card-text">Laporkan kejadian bencana alam yang Anda saksikan.</p>
-                    <a href="user/laporan-bencana.php" class="btn btn-primary">Laporkan Sekarang</a>
+    <div class="layanan-cepat p-4 text-center bg-white shadow rounded-3 mt-4 mx-1">
+    <h4 class="text-primary mb-4"><i class="fa-solid fa-bolt"></i> Layanan Cepat</h4>
+    <div class="row g-4 justify-content-center">
+
+        <!-- Ajukan Surat -->
+        <div class="col-6 col-md-3">
+            <a href="user/menu-pengajuan-surat.php" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow-sm border-0 hover-shadow">
+                    <div class="card-body">
+                        <i class="fa-solid fa-file-circle-plus fa-2x text-success mb-2"></i>
+                        <p class="fw-bold mb-0">Ajukan Surat</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
-        <div class="col-12 col-md-4">
-            <div class="card border-success card-menu-animate">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fa-solid fa-file-lines text-success me-2"></i> Pengajuan Surat</h5>
-                    <p class="card-text">Ajukan surat pengantar KTP, KK, dan lainnya secara online.</p>
-                    <a href="user/menu-pengajuan-surat.php" class="btn btn-success">Ajukan Surat</a>
+        <!-- Laporan Bencana -->
+        <div class="col-6 col-md-3">
+            <a href="user/laporan-bencana.php" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow-sm border-0 hover-shadow">
+                    <div class="card-body">
+                        <i class="fa-solid fa-triangle-exclamation fa-2x text-danger mb-2"></i>
+                        <p class="fw-bold mb-0">Laporan Bencana</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
-        <div class="col-12 col-md-4">
-            <div class="card border-info card-menu-animate">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fa-solid fa-heart-pulse text-info me-2"></i> Kesehatan Desa</h5>
-                    <p class="card-text">Lihat jadwal posyandu, warga rentan, dan imunisasi desa Anda.</p>
-                    <a href="user/kesehatan.php" class="btn btn-info text-white">Lihat Kesehatan</a>
+        <!-- Kesehatan Desa -->
+        <div class="col-6 col-md-3">
+            <a href="user/kesehatan.php" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow-sm border-0 hover-shadow">
+                    <div class="card-body">
+                        <i class="fa-solid fa-heart-pulse fa-2x text-info mb-2"></i>
+                        <p class="fw-bold mb-0">Kesehatan Desa</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
+
+        <!-- Surat KTP/KK -->
+        <div class="col-6 col-md-3">
+            <a href="user/surat-ktp-kk.php" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow-sm border-0 hover-shadow">
+                    <div class="card-body">
+                        <i class="fa-solid fa-id-card fa-2x text-primary mb-2"></i>
+                        <p class="fw-bold mb-0">Surat KTP/KK</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
     </div>
+</div>
+
 
     <div class="mt-5">
         <h4 class="mb-3">📋 Jadwal Kegiatan Umum</h4>
