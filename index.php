@@ -26,6 +26,9 @@ while ($row = mysqli_fetch_assoc($query)) {
     $statistik_jumlah[] = $row['jumlah'];
 }
 
+$berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DESC LIMIT 3");
+
+
 ?>
 
 <!DOCTYPE html>
@@ -49,13 +52,19 @@ while ($row = mysqli_fetch_assoc($query)) {
     </div>
     <?php unset($_SESSION['login_success']); ?>
 <?php endif; ?>
-
+<!---- navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center">
         <a class="navbar-brand" href="#">Sistem Informasi Desa</a>
         <div class="d-flex flex-wrap align-items-center">
             <span class="navbar-text text-white me-3">Halo, <?= htmlspecialchars($nama_user) ?></span>
-            <!---A07: Identification and Authentication Failures -->
+
+            <?php if (isset($_SESSION['log']) && $_SESSION['role'] === 'user'): ?>
+                <a href="user/kirim-berita.php" class="btn btn-light btn-sm me-2">
+                    <i class="fa-solid fa-pen-to-square"></i> Kirim Berita
+                </a>
+            <?php endif; ?>
+
             <?php if (isset($_SESSION['log']) && $_SESSION['log'] === true): ?>
                 <a href="user/logout.php" class="btn btn-outline-light btn-sm">Logout</a>
             <?php else: ?>
@@ -206,6 +215,38 @@ while ($row = mysqli_fetch_assoc($query)) {
             <?php endwhile; ?>
         </div>
     </div>
+
+    <div class="mt-5">
+    <h4 class="mb-3">📰 Berita Desa</h4>
+    <div class="row g-3">
+        <?php if ($berita && mysqli_num_rows($berita) > 0): ?>
+            <?php while ($b = mysqli_fetch_assoc($berita)): ?>
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 border-warning">
+                        <?php if (!empty($b['gambar'])): ?>
+                            <img src="uploads/<?= htmlspecialchars($b['gambar']) ?>" class="card-img-top" style="max-height: 180px; object-fit: cover;" alt="Gambar Berita">
+                        <?php endif; ?>
+                        <div class="card-body">
+                            <h5 class="card-title"><?= htmlspecialchars($b['judul']) ?></h5>
+                            <small class="text-muted"><?= date('d M Y', strtotime($b['tanggal'])) ?> | <?= htmlspecialchars($b['penulis']) ?></small>
+                            <p class="card-text mt-2"><?= htmlspecialchars(substr($b['isi'], 0, 100)) ?>...</p>
+                            <a href="user/berita-desa.php" class="btn btn-sm btn-outline-warning">Selengkapnya</a>
+                        </div>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <div class="col-12">
+                <div class="alert alert-info text-center">Belum ada berita terbaru.</div>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="user/berita-desa.php" class="btn btn-warning">Lihat Semua Berita</a>
+    </div>
+</div>
+
 
     <div class="sambutan-box fade-in mt-5" id="sambutan">
         <h5>Sambutan Kepala Desa</h5>
