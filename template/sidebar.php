@@ -44,7 +44,7 @@
                 <div class="sb-sidenav-menu-heading">Log aktifitas</div>
                 <a class="nav-link" href="../admin/log-user.php">
                     <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
-                    Jadwal Kegiatan
+                    Log user
                 </a>
             </div>
         </div>

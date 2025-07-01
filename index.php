@@ -259,113 +259,40 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
         <p class="text-end"><strong>– Bapak Yanyan, Kepala Desa</strong></p>
     </div>
 
-  <div class="container py-4">
-  <h2 class="text-center mb-4">Struktur Organisasi Desa</h2>
+ <div class="container py-4">
+    <h2 class="text-center mb-4">Struktur Organisasi Desa</h2>
 
-  <div class="tree">
-    <ul>
-      <li>
-        <a href="#" class="struktur-clickable"
-           data-nama="Yanyan Julyandi"
-           data-foto="aset/yanyan2.jpg"
-           data-quote="Saya siap membangun desa dengan hati dan integritas.">
-           <img src="aset/yanyan2.jpg" class="struktur-img">
-           Lurah<br><small>Yanyan Julyandi</small>
-        </a>
-        <ul>
-          <li>
-            <a href="#" class="struktur-clickable"
-               data-nama="Bintang Rogerman"
-               data-foto="aset/rojak2.jpg"
-               data-quote="Administrasi adalah fondasi pemerintahan yang tertib.">
-               <img src="aset/rojak2.jpg" class="struktur-img">
-               Sekretaris Desa<br><small>Bintang Rogerman</small>
-            </a>
-            <ul>
-              <li>
-                <a href="#" class="struktur-clickable"
-                   data-nama="Bintang Rogerman"
-                   data-foto="aset/rojak2.jpg"
-                   data-quote="Setiap rupiah harus bisa dipertanggungjawabkan.">
-                   <img src="aset/rojak2.jpg" class="struktur-img">
-                   Bendahara<br><small>Bintang Rogerman</small>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="struktur-clickable"
-                   data-nama="M. Yusuf"
-                   data-foto="aset/ucup.jpg"
-                   data-quote="Pelayanan cepat, warga puas.">
-                   <img src="aset/ucup.jpg" class="struktur-img">
-                   Kaur Umum<br><small>M. Yusuf</small>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a href="#" class="struktur-clickable"
-               data-nama="Yanyan Julyandi"
-               data-foto="aset/yanyan2.jpg"
-               data-quote="Saya dekat dengan warga RW 1.">
-               <img src="aset/yanyan2.jpg" class="struktur-img">
-               RW 01<br><small>Yanyan Julyandi</small>
-            </a>
-            <ul>
-              <li>
-                <a href="#" class="struktur-clickable"
-                   data-nama="M. Yusuf"
-                   data-foto="aset/ucup.jpg"
-                   data-quote="RT adalah ujung tombak desa.">
-                   <img src="aset/ucup.jpg" class="struktur-img">
-                   RT 01<br><small>M. Yusuf</small>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="struktur-clickable"
-                   data-nama="Bintang Rogerman"
-                   data-foto="aset/rojak2.jpg"
-                   data-quote="Bersama wargaku, membangun lingkungan.">
-                   <img src="aset/rojak2.jpg" class="struktur-img">
-                   RT 02<br><small>Bintang Rogerman</small>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a href="#" class="struktur-clickable"
-               data-nama="M. Yusuf"
-               data-foto="aset/ucup.jpg"
-               data-quote="Saya mendengar dan melayani RW 2.">
-               <img src="aset/ucup.jpg" class="struktur-img">
-               RW 02<br><small>M. Yusuf</small>
-            </a>
-            <ul>
-              <li>
-                <a href="#" class="struktur-clickable"
-                   data-nama="Bintang Rogerman"
-                   data-foto="aset/rojak2.jpg"
-                   data-quote="Kami jaga gotong royong warga.">
-                   <img src="aset/rojak2.jpg" class="struktur-img">
-                   RT 03<br><small>Bintang Rogerman</small>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="struktur-clickable"
-                   data-nama="M. Yusuf"
-                   data-foto="aset/ucup.jpg"
-                   data-quote="RT 04 siap jadi teladan bagi desa.">
-                   <img src="aset/ucup.jpg" class="struktur-img">
-                   RT 04<br><small>M. Yusuf</small>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
+    <div class="tree">
+      <ul>
+        <li>
+          <a href="#"><img src="aset/yanyan2.jpg">Lurah<br><small>Yanyan Julyandi</small></a>
+          <ul>
+            <li>
+              <a href="#"><img src="aset/rojak2.jpg">Sekretaris Desa<br><small>Bintang Rogerman</small></a>
+              <ul>
+                <li><a href="#"><img src="aset/rojak2.jpg">Bendahara<br><small>Bintang Rogerman</small></a></li>
+                <li><a href="#"><img src="aset/ucup.jpg">Kaur Umum<br><small>M. Yusuf</small></a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#"><img src="aset/yanyan2.jpg">RW 01<br><small>Yanyan Julyandi</small></a>
+              <ul>
+                <li><a href="#"><img src="aset/ucup.jpg">RT 01<br><small>M. Yusuf</small></a></li>
+                <li><a href="#"><img src="aset/rojak2.jpg">RT 02<br><small>Bintang Rogerman</small></a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#"><img src="aset/ucup.jpg">RW 02<br><small>M. Yusuf</small></a>
+              <ul>
+                <li><a href="#"><img src="aset/rojak2.jpg">RT 03<br><small>Bintang Rogerman</small></a></li>
+                <li><a href="#"><img src="aset/ucup.jpg">RT 04<br><small>M. Yusuf</small></a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
-
 <!-- Modal Detail Struktur -->
 <div class="modal fade" id="strukturModal" tabindex="-1" aria-labelledby="strukturModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -387,7 +314,7 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
 
     <footer class="mt-5 text-center text-muted">
         <hr>
-        <small>&copy; <?= date('Y') ?> Sistem Informasi Desa - Dibuat oleh Admin Desa</small>
+        <small>&copy; <?= date('Y') ?> Sistem Informasi Desa - Dibuat oleh Kelompok 1</small>
     </footer>
 </div>
 
