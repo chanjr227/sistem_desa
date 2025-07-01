@@ -259,98 +259,113 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
         <p class="text-end"><strong>– Bapak Yanyan, Kepala Desa</strong></p>
     </div>
 
-   <div class="tree">
+  <div class="container py-4">
+  <h2 class="text-center mb-4">Struktur Organisasi Desa</h2>
+
+  <div class="tree">
     <ul>
-        <li>
+      <li>
+        <a href="#" class="struktur-clickable"
+           data-nama="Yanyan Julyandi"
+           data-foto="aset/yanyan2.jpg"
+           data-quote="Saya siap membangun desa dengan hati dan integritas.">
+           <img src="aset/yanyan2.jpg" class="struktur-img">
+           Lurah<br><small>Yanyan Julyandi</small>
+        </a>
+        <ul>
+          <li>
             <a href="#" class="struktur-clickable"
-               data-nama="Yanyan julyandi"
-               data-foto="aset/yanyan2.jpg"
-               data-quote="Saya siap membangun desa dengan hati dan integritas.">
-               Lurah<br><small>Yanyan julyandi</small>
+               data-nama="Bintang Rogerman"
+               data-foto="aset/rojak2.jpg"
+               data-quote="Administrasi adalah fondasi pemerintahan yang tertib.">
+               <img src="aset/rojak2.jpg" class="struktur-img">
+               Sekretaris Desa<br><small>Bintang Rogerman</small>
             </a>
             <ul>
-                <li>
-                    <a href="#" class="struktur-clickable"
-                       data-nama="Bintang rogerman"
-                       data-foto="aset/rojak2.jpg"
-                       data-quote="Administrasi adalah fondasi pemerintahan yang tertib.">
-                       Sekretaris Desa<br><small>Bintang rogerman</small>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="#" class="struktur-clickable"
-                               data-nama="Bintang rogerman"
-                               data-foto="aset/rojak2.jpg"
-                               data-quote="Setiap rupiah harus bisa dipertanggungjawabkan.">
-                               Bendahara<br><small>Bintang rogerman</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="struktur-clickable"
-                               data-nama="M. Yusuf"
-                               data-foto="aset/ucup.jpg"
-                               data-quote="Pelayanan cepat, warga puas.">
-                               Kaur Umum<br><small>M. Yusuf</small>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="struktur-clickable"
-                       data-nama="Yanyan Julyandi"
-                       data-foto="aset/yanyan2.jpg"
-                       data-quote="Saya dekat dengan warga RW 1.">
-                       RW 01<br><small>Yanyan julyandi</small>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="#" class="struktur-clickable"
-                               data-nama="M . Yusuf"
-                               data-foto="aset/ucup.jpg"
-                               data-quote="RT adalah ujung tombak desa.">
-                               RT 01<br><small>M. Yusuf</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="struktur-clickable"
-                               data-nama="Bintang Rogerman"
-                               data-foto="aset/rojak2.jpg"
-                               data-quote="Bersama wargaku, membangun lingkungan.">
-                               RT 02<br><small>Bintang rogerman</small>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="struktur-clickable"
-                       data-nama="M. Yusuf"
-                       data-foto="aset/ucup.jpg"
-                       data-quote="Saya mendengar dan melayani RW 2.">
-                       RW 02<br><small>M. Yusuf</small>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="#" class="struktur-clickable"
-                               data-nama="Bintang Rogerman"
-                               data-foto="aset/rojak2.jpg"
-                               data-quote="Kami jaga gotong royong warga.">
-                               RT 03<br><small>Bintang rogerman</small>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="struktur-clickable"
-                               data-nama="M. Yusuf"
-                               data-foto="aset/ucup.jpg"
-                               data-quote="RT 04 siap jadi teladan bagi desa.">
-                               RT 04<br><small>M. Yusuf</small>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+              <li>
+                <a href="#" class="struktur-clickable"
+                   data-nama="Bintang Rogerman"
+                   data-foto="aset/rojak2.jpg"
+                   data-quote="Setiap rupiah harus bisa dipertanggungjawabkan.">
+                   <img src="aset/rojak2.jpg" class="struktur-img">
+                   Bendahara<br><small>Bintang Rogerman</small>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="struktur-clickable"
+                   data-nama="M. Yusuf"
+                   data-foto="aset/ucup.jpg"
+                   data-quote="Pelayanan cepat, warga puas.">
+                   <img src="aset/ucup.jpg" class="struktur-img">
+                   Kaur Umum<br><small>M. Yusuf</small>
+                </a>
+              </li>
             </ul>
-        </li>
+          </li>
+          <li>
+            <a href="#" class="struktur-clickable"
+               data-nama="Yanyan Julyandi"
+               data-foto="aset/yanyan2.jpg"
+               data-quote="Saya dekat dengan warga RW 1.">
+               <img src="aset/yanyan2.jpg" class="struktur-img">
+               RW 01<br><small>Yanyan Julyandi</small>
+            </a>
+            <ul>
+              <li>
+                <a href="#" class="struktur-clickable"
+                   data-nama="M. Yusuf"
+                   data-foto="aset/ucup.jpg"
+                   data-quote="RT adalah ujung tombak desa.">
+                   <img src="aset/ucup.jpg" class="struktur-img">
+                   RT 01<br><small>M. Yusuf</small>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="struktur-clickable"
+                   data-nama="Bintang Rogerman"
+                   data-foto="aset/rojak2.jpg"
+                   data-quote="Bersama wargaku, membangun lingkungan.">
+                   <img src="aset/rojak2.jpg" class="struktur-img">
+                   RT 02<br><small>Bintang Rogerman</small>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#" class="struktur-clickable"
+               data-nama="M. Yusuf"
+               data-foto="aset/ucup.jpg"
+               data-quote="Saya mendengar dan melayani RW 2.">
+               <img src="aset/ucup.jpg" class="struktur-img">
+               RW 02<br><small>M. Yusuf</small>
+            </a>
+            <ul>
+              <li>
+                <a href="#" class="struktur-clickable"
+                   data-nama="Bintang Rogerman"
+                   data-foto="aset/rojak2.jpg"
+                   data-quote="Kami jaga gotong royong warga.">
+                   <img src="aset/rojak2.jpg" class="struktur-img">
+                   RT 03<br><small>Bintang Rogerman</small>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="struktur-clickable"
+                   data-nama="M. Yusuf"
+                   data-foto="aset/ucup.jpg"
+                   data-quote="RT 04 siap jadi teladan bagi desa.">
+                   <img src="aset/ucup.jpg" class="struktur-img">
+                   RT 04<br><small>M. Yusuf</small>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
     </ul>
+  </div>
 </div>
+
 <!-- Modal Detail Struktur -->
 <div class="modal fade" id="strukturModal" tabindex="-1" aria-labelledby="strukturModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -369,7 +384,6 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
     </div>
   </div>
 </div>
-
 
     <footer class="mt-5 text-center text-muted">
         <hr>
@@ -448,5 +462,40 @@ new Chart(ctx, {
     }
 });
 </script>
+
+<script>
+  document.querySelectorAll('.struktur-clickable').forEach(el => {
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const nama = this.dataset.nama;
+      const foto = this.dataset.foto;
+      const quote = this.dataset.quote;
+
+      document.getElementById('strukturNama').textContent = nama;
+      document.getElementById('strukturFoto').src = foto;
+      document.getElementById('strukturQuote').textContent = quote;
+
+      const modal = new bootstrap.Modal(document.getElementById('strukturModal'));
+      modal.show();
+    });
+  });
+</script>
+<script>
+  const modalEl = document.getElementById('strukturModal');
+
+  modalEl.addEventListener('hidden.bs.modal', function () {
+    // Hapus class "modal-open" dari body jika masih ada
+    document.body.classList.remove('modal-open');
+
+    // Hapus backdrop yang masih tertinggal
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach(el => el.remove());
+
+    // Pulihkan scroll halaman
+    document.body.style.overflow = 'auto';
+  });
+</script>
+
 </body>
 </html>
