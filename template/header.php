@@ -1,3 +1,6 @@
+<?
+$_SESSION['admin_nama'] = $data['nama']; // atau username/email sesuai database
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
