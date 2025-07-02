@@ -224,7 +224,7 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
                 <div class="col-md-4">
                     <div class="card shadow-sm h-100 border-warning">
                         <?php if (!empty($b['gambar'])): ?>
-                            <img src="uploads/<?= htmlspecialchars($b['gambar']) ?>" class="card-img-top" style="max-height: 180px; object-fit: cover;" alt="Gambar Berita">
+                    <img src="<?= htmlspecialchars($b['gambar']) ?>" class="card-img-top" style="max-height: 180px; object-fit: cover;" alt="Gambar Berita">
                         <?php endif; ?>
                         <div class="card-body">
                             <h5 class="card-title"><?= htmlspecialchars($b['judul']) ?></h5>
