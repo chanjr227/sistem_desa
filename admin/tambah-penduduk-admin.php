@@ -21,8 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userid = $_SESSION['userid'] ?? null;
 
     if ($userid) {
-$stmt = $koneksi->prepare("INSERT INTO penduduk (nama, NIK, alamat, jenis_kelamin, tanggal_lahir) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("sssss", $nama, $nik, $alamat, $jenis_kelamin, $tanggal_lahir);
+        $stmt = $koneksi->prepare("INSERT INTO penduduk (nama, NIK, alamat, jenis_kelamin, tanggal_lahir) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $nama, $nik, $alamat, $jenis_kelamin, $tanggal_lahir);
 
 
 
@@ -43,7 +43,7 @@ $stmt->bind_param("sssss", $nama, $nik, $alamat, $jenis_kelamin, $tanggal_lahir)
 
 <div id="layoutSidenav">
     <?php include '../template/sidebar.php'; ?>
-    
+
     <div id="layoutSidenav_content">
         <main class="container-fluid px-4 py-4">
             <h3 class="mb-4">Form Tambah Data Kependudukan</h3>

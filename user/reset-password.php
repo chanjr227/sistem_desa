@@ -2,8 +2,8 @@
 require '../config/config.php';
 require '../helpers/log_helpers.php';
 
- // Panggil log
-        simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Meminta reset password');
+// Panggil log
+simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Meminta reset password');
 
 $token = $_GET['token'] ?? '';
 $success = false;
@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user) {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Reset Password Baru</title>
@@ -66,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user) {
         .card {
             border: none;
             border-radius: 1rem;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
             background-color: #fff;
             padding: 2rem;
             width: 100%;
@@ -102,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user) {
         }
     </style>
 </head>
+
 <body>
 
     <div class="card">
@@ -134,17 +136,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user) {
         <?php endif; ?>
     </div>
 
-<script>
-function togglePassword(fieldId) {
-    const field = document.getElementById(fieldId);
-    field.type = field.type === "password" ? "text" : "password";
-}
+    <script>
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            field.type = field.type === "password" ? "text" : "password";
+        }
 
-document.getElementById('resetForm')?.addEventListener('submit', function () {
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Mengubah...`;
-});
-</script>
+        document.getElementById('resetForm')?.addEventListener('submit', function() {
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Mengubah...`;
+        });
+    </script>
 </body>
+
 </html>

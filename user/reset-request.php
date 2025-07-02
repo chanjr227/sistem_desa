@@ -63,14 +63,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Reset Password</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-light d-flex align-items-center justify-content-center" style="height: 100vh;">
     <div class="card p-4 shadow" style="max-width: 400px;">
         <h4 class="mb-3 text-center">🔐 Reset Password</h4>
@@ -83,20 +84,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="email" name="email" class="form-control" required autofocus>
             </div>
             <button class="btn btn-primary w-100" type="submit" id="btnReset">
-    Kirim Link Reset
-</button>
+                Kirim Link Reset
+            </button>
         </form>
         <p class="text-muted small mt-2">
-  Kami akan mengirimkan link untuk reset password jika email Anda terdaftar.
-</p>
+            Kami akan mengirimkan link untuk reset password jika email Anda terdaftar.
+        </p>
 
     </div>
     <script>
-document.querySelector('form').addEventListener('submit', () => {
-    const btn = document.getElementById('btnReset');
-    btn.disabled = true;
-    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Mengirim...`;
-});
-</script>
+        document.querySelector('form').addEventListener('submit', () => {
+            const btn = document.getElementById('btnReset');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Mengirim...`;
+        });
+    </script>
 </body>
+
 </html>

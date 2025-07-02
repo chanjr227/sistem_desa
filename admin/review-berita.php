@@ -78,7 +78,8 @@ include '../template/navbar.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $no = 1; while ($b = $berita->fetch_assoc()): ?>
+                                    <?php $no = 1;
+                                    while ($b = $berita->fetch_assoc()): ?>
                                         <tr>
                                             <td class="text-center"><?= $no++ ?></td>
                                             <td><?= htmlspecialchars($b['judul']) ?></td>

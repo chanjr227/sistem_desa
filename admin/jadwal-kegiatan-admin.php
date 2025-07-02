@@ -103,7 +103,8 @@ $data = $koneksi->query("SELECT * FROM jadwal_kegiatan ORDER BY tanggal ASC, wak
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $no = 1; while ($row = $data->fetch_assoc()): ?>
+                            <?php $no = 1;
+                            while ($row = $data->fetch_assoc()): ?>
                                 <tr>
                                     <td class="text-center"><?= $no++ ?></td>
                                     <td><?= htmlspecialchars($row['nama_kegiatan']) ?></td>
@@ -116,7 +117,6 @@ $data = $koneksi->query("SELECT * FROM jadwal_kegiatan ORDER BY tanggal ASC, wak
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </main>
 

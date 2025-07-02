@@ -64,13 +64,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registrasi</title>
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
+
 <body>
     <div class="box">
         <form method="POST" autocomplete="off">
@@ -108,11 +110,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
 
             <button type="submit" class="btnLogin">Daftar</button>
-
             <div class="registrasi">
                 <p>Sudah punya akun? <a href="login.php">Login di sini</a></p>
             </div>
         </form>
     </div>
 </body>
+
 </html>

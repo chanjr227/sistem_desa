@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Form Pengaduan Karyawan</title>
@@ -59,73 +60,83 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         body {
             background: #f4f7fc;
         }
+
         .card-custom {
             border-radius: 16px;
             border: none;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             animation: fadeIn 0.6s ease;
         }
+
         @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(20px);}
-            to {opacity: 1; transform: translateY(0);}
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg bg-primary text-white px-4 py-2 shadow">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-        <a class="navbar-brand text-white fw-bold" href="../index.php">Sistem Informasi Desa</a>
-        <div class="d-flex align-items-center gap-2">
-            <span class="text-white fw-light">Halo, <?= htmlspecialchars($nama_user) ?></span>
-            <a href="../index.php" class="btn btn-sm btn-light text-primary">← Kembali</a>
-            <a href="logout.php" class="btn btn-sm btn-danger">Logout</a>
+    <nav class="navbar navbar-expand-lg bg-primary text-white px-4 py-2 shadow">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <a class="navbar-brand text-white fw-bold" href="../index.php">Sistem Informasi Desa</a>
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-white fw-light">Halo, <?= htmlspecialchars($nama_user) ?></span>
+                <a href="../index.php" class="btn btn-sm btn-light text-primary">← Kembali</a>
+                <a href="logout.php" class="btn btn-sm btn-danger">Logout</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card card-custom p-4 bg-white">
+                    <h3 class="mb-4 text-center text-primary fw-bold">📝 Pengaduan Kinerja Karyawan</h3>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
-            <div class="card card-custom p-4 bg-white">
-                <h3 class="mb-4 text-center text-primary fw-bold">📝 Pengaduan Kinerja Karyawan</h3>
+                    <?php if ($success): ?>
+                        <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
+                    <?php elseif ($error): ?>
+                        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+                    <?php endif; ?>
 
-                <?php if ($success): ?>
-                    <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-                <?php elseif ($error): ?>
-                    <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-                <?php endif; ?>
+                    <form method="POST" novalidate>
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
-                <form method="POST" novalidate>
-                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                        <div class="mb-3">
+                            <label for="nama_karyawan" class="form-label">Nama Karyawan</label>
+                            <input type="text" name="nama_karyawan" id="nama_karyawan" class="form-control"
+                                value="<?= htmlspecialchars($nama_karyawan) ?>" required placeholder="Masukkan nama lengkap karyawan">
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="nama_karyawan" class="form-label">Nama Karyawan</label>
-                        <input type="text" name="nama_karyawan" id="nama_karyawan" class="form-control" 
-                            value="<?= htmlspecialchars($nama_karyawan) ?>" required placeholder="Masukkan nama lengkap karyawan">
-                    </div>
+                        <div class="mb-3">
+                            <label for="jabatan_karyawan" class="form-label">Jabatan Karyawan</label>
+                            <input type="text" name="jabatan_karyawan" id="jabatan_karyawan" class="form-control"
+                                value="<?= htmlspecialchars($jabatan_karyawan) ?>" required placeholder="Contoh: Staf Pelayanan Publik">
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="jabatan_karyawan" class="form-label">Jabatan Karyawan</label>
-                        <input type="text" name="jabatan_karyawan" id="jabatan_karyawan" class="form-control"
-                            value="<?= htmlspecialchars($jabatan_karyawan) ?>" required placeholder="Contoh: Staf Pelayanan Publik">
-                    </div>
+                        <div class="mb-3">
+                            <label for="isi_pengaduan" class="form-label">Isi Pengaduan</label>
+                            <textarea name="isi_pengaduan" id="isi_pengaduan" rows="5" class="form-control" required
+                                placeholder="Tulis keluhan atau pengaduan Anda secara detail..."><?= htmlspecialchars($isi_pengaduan) ?></textarea>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="isi_pengaduan" class="form-label">Isi Pengaduan</label>
-                        <textarea name="isi_pengaduan" id="isi_pengaduan" rows="5" class="form-control" required
-                                  placeholder="Tulis keluhan atau pengaduan Anda secara detail..."><?= htmlspecialchars($isi_pengaduan) ?></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary w-100 fw-semibold">📨 Kirim Pengaduan</button>
-                </form>
-<!-- 
+                        <button type="submit" class="btn btn-primary w-100 fw-semibold">📨 Kirim Pengaduan</button>
+                    </form>
+                    <!-- 
                 <div class="text-center mt-3">
                     <a href="../index.php" class="btn btn-outline-secondary">← Kembali ke Dashboard</a>
                 </div> -->
+                </div>
             </div>
         </div>
     </div>
-</div>
 </body>
+
 </html>

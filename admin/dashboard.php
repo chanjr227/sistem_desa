@@ -89,432 +89,457 @@ $struktur = $koneksi->query("SELECT * FROM struktur_organisasi");
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Dashboard</title>
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-        <link href="../css/styles.css" rel="stylesheet" />
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    </head>
-    <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">Desa Rajeg</a>
-            <!-- Sidebar Toggle-->
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-            <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                <div class="input-group">
-                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-                </div>
-            </form>
-            <!-- Navbar-->
-            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-        <div id="layoutSidenav">
-            <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Halaman utama</div>
-                            <a class="nav-link" href="dashboard.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard admin
-                            </a>
-                            <div class="sb-sidenav-menu-heading">Menu Pengaduan dan Laporan Bencana</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Menu
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layanan-pengaduan-admin.php">Layanan Pengaduan</a>
-                                    <a class="nav-link" href="laporan-bencana-admin.php">Laporan Bencana</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Menu layanan Kesehatan
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="kesehatan-admin.php">Layanan kesehatans</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Penduduk dan surat
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Tambah Penduduk
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="tambah-penduduk-admin.php">Tambah Penduduk</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        surat pengantar dan jadwal kegiatan
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="pengajuan-surat-admin.php">Surat pengantarr</a>
-                                            <a class="nav-link" href="jadwal-kegiatan-admin.php">Jadwal kegiatan</a>
-                                        </nav>
-                                    </div>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Log
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        menu log dan berita
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="log-user.php">Menu Log User</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        Tambah berita dan review berita
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="tambah-berita.php">Tambah berita</a>
-                                            <a class="nav-link" href="review-berita.php">Review berita</a>
-                                        </nav>
-                                    </div>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-    <div class="small">Login sebagai:</div>
-    <?= htmlspecialchars($_SESSION['name'] ?? 'Admin Desa') ?>
-</div>
 
-                </nav>
-            </div>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">Dashboard</h1>
-                        <ol class="breadcrumb mb-4">
-                            <!-- <li class="breadcrumb-item active">Dashboard</li> -->
-                        </ol>
-                            <div class="row">
-    <!-- Card: Laporan Pengaduan -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs fw-bold text-primary text-uppercase mb-1">
-                            Laporan Pengaduan
-                        </div>
-                        <a href="layanan-pengaduan-admin.php" class="text-decoration-none small">Lihat detail</a>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-comments fa-2x text-primary"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="../css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
 
-    <!-- Card: Layanan Kesehatan -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs fw-bold text-success text-uppercase mb-1">
-                            Layanan Kesehatan
-                        </div>
-                        <a href="kesehatan-admin.php" class="text-decoration-none small">Lihat detail</a>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-heartbeat fa-2x text-success"></i>
-                    </div>
-                </div>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Navbar Brand-->
+        <a class="navbar-brand ps-3" href="index.html">Desa Rajeg</a>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+        <!-- Navbar Search-->
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
             </div>
-        </div>
-    </div>
-
-    <!-- Card: Tambah Penduduk -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs fw-bold text-warning text-uppercase mb-1">
-                            Tambah Penduduk
+        </form>
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Halaman utama</div>
+                        <a class="nav-link" href="dashboard.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Dashboard admin
+                        </a>
+                        <div class="sb-sidenav-menu-heading">Menu Pengaduan dan Laporan Bencana</div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Menu
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layanan-pengaduan-admin.php">Layanan Pengaduan</a>
+                                <a class="nav-link" href="laporan-bencana-admin.php">Laporan Bencana</a>
+                            </nav>
                         </div>
-                        <a href="tambah-penduduk-admin.php" class="text-decoration-none small">Lihat detail</a>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-user-plus fa-2x text-warning"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Card: Surat Pengantar -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-danger shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs fw-bold text-danger text-uppercase mb-1">
-                            Surat Pengantar
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Menu layanan Kesehatan
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="kesehatan-admin.php">Layanan kesehatans</a>
+                            </nav>
                         </div>
-                        <a href="pengajuan-surat-admin.php" class="text-decoration-none small">Lihat detail</a>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-envelope-open-text fa-2x text-danger"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-area me-1"></i>
-                                        Jumlah pengaduan
-                                    </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                            Penduduk dan surat
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                    Tambah Penduduk
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="tambah-penduduk-admin.php">Tambah Penduduk</a>
+                                    </nav>
                                 </div>
-                            </div>
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-bar me-1"></i>
-                                        Jumlah penduduk
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                    surat pengantar dan jadwal kegiatan
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="pengajuan-surat-admin.php">Surat pengantarr</a>
+                                        <a class="nav-link" href="jadwal-kegiatan-admin.php">Jadwal kegiatan</a>
+                                    </nav>
+                                </div>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                            Log
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                    menu log dan berita
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="log-user.php">Menu Log User</a>
+                                    </nav>
+                                </div>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                    Tambah berita dan review berita
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="tambah-berita.php">Tambah berita</a>
+                                        <a class="nav-link" href="review-berita.php">Review berita</a>
+                                    </nav>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small">Login sebagai:</div>
+                    <?= htmlspecialchars($_SESSION['name'] ?? 'Admin Desa') ?>
+                </div>
+
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Dashboard</h1>
+                    <ol class="breadcrumb mb-4">
+                        <!-- <li class="breadcrumb-item active">Dashboard</li> -->
+                    </ol>
+                    <div class="row">
+                        <!-- Card: Laporan Pengaduan -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col me-2">
+                                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">
+                                                Laporan Pengaduan
+                                            </div>
+                                            <a href="layanan-pengaduan-admin.php" class="text-decoration-none small">Lihat detail</a>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-comments fa-2x text-primary"></i>
+                                        </div>
                                     </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
                                 </div>
                             </div>
                         </div>
-<div class="card mb-4">
-  <div class="card-header">
-    <i class="fas fa-sitemap me-1"></i>
-    Struktur Organisasi
-    <button class="btn btn-sm btn-success float-end" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah</button>
-  </div>
-  <div class="card-body">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Nama</th>
-          <th>Jabatan</th>
-          <th>Foto</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php while($row = $struktur->fetch_assoc()): ?>
-        <tr>
-          <td><?= htmlspecialchars($row['nama']) ?></td>
-          <td><?= htmlspecialchars($row['jabatan']) ?></td>
-          <td>
-            <?php if ($row['foto']): ?>
-            <img src="../uploads/<?= htmlspecialchars($row['foto']) ?>" width="50" height="50" style="border-radius: 50%">
-            <?php else: ?>
-            <span>Tidak ada</span>
-            <?php endif; ?>
-          </td>
-          <td>
-            <button class="btn btn-warning btn-sm btn-edit" data-id="<?= $row['id'] ?>" data-nama="<?= htmlspecialchars($row['nama']) ?>" data-jabatan="<?= htmlspecialchars($row['jabatan']) ?>" data-foto="<?= htmlspecialchars($row['foto']) ?>" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit</button>
-            <a href="?hapus=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">Hapus</a>
-          </td>
-        </tr>
-        <?php endwhile; ?>
-      </tbody>
-    </table>
-  </div>
-</div>
 
-<!-- Modal Tambah -->
-<div class="modal fade" id="modalTambah" tabindex="-1">
-  <div class="modal-dialog">
-    <form action="dashboard.php" method="POST" enctype="multipart/form-data" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Tambah Anggota</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" name="tambah" value="1">
-        <div class="mb-3">
-          <label>Nama</label>
-          <input type="text" name="nama" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label>Jabatan</label>
-          <input type="text" name="jabatan" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label>Foto</label>
-          <input type="file" name="foto" class="form-control">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Simpan</button>
-      </div>
-    </form>
-  </div>
-</div>
+                        <!-- Card: Layanan Kesehatan -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col me-2">
+                                            <div class="text-xs fw-bold text-success text-uppercase mb-1">
+                                                Layanan Kesehatan
+                                            </div>
+                                            <a href="kesehatan-admin.php" class="text-decoration-none small">Lihat detail</a>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-heartbeat fa-2x text-success"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-<!-- Modal Edit -->
-<div class="modal fade" id="modalEdit" tabindex="-1">
-  <div class="modal-dialog">
-    <form action="dashboard.php" method="POST" enctype="multipart/form-data" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Edit Anggota</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" name="edit" value="1">
-        <input type="hidden" name="id" id="edit-id">
-        <div class="mb-3">
-          <label>Nama</label>
-          <input type="text" name="nama" id="edit-nama" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label>Jabatan</label>
-          <input type="text" name="jabatan" id="edit-jabatan" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label>Foto Saat Ini</label><br>
-          <img id="edit-preview" src="" width="60">
-        </div>
-        <div class="mb-3">
-          <label>Ganti Foto</label>
-          <input type="file" name="foto" class="form-control">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-      </div>
-    </form>
-  </div>
-</div>
+                        <!-- Card: Tambah Penduduk -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col me-2">
+                                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">
+                                                Tambah Penduduk
+                                            </div>
+                                            <a href="tambah-penduduk-admin.php" class="text-decoration-none small">Lihat detail</a>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-user-plus fa-2x text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Sistem desa Rajeg 2025</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
+                        <!-- Card: Surat Pengantar -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col me-2">
+                                            <div class="text-xs fw-bold text-danger text-uppercase mb-1">
+                                                Surat Pengantar
+                                            </div>
+                                            <a href="pengajuan-surat-admin.php" class="text-decoration-none small">Lihat detail</a>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-envelope-open-text fa-2x text-danger"></i>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </footer>
-            </div>
+
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-area me-1"></i>
+                                    Jumlah pengaduan
+                                </div>
+                                <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-bar me-1"></i>
+                                    Jumlah penduduk
+                                </div>
+                                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-sitemap me-1"></i>
+                            Struktur Organisasi
+                            <button class="btn btn-sm btn-success float-end" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah</button>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Jabatan</th>
+                                        <th>Foto</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($row = $struktur->fetch_assoc()): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['nama']) ?></td>
+                                            <td><?= htmlspecialchars($row['jabatan']) ?></td>
+                                            <td>
+                                                <?php if ($row['foto']): ?>
+                                                    <img src="../uploads/<?= htmlspecialchars($row['foto']) ?>" width="50" height="50" style="border-radius: 50%">
+                                                <?php else: ?>
+                                                    <span>Tidak ada</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-warning btn-sm btn-edit" data-id="<?= $row['id'] ?>" data-nama="<?= htmlspecialchars($row['nama']) ?>" data-jabatan="<?= htmlspecialchars($row['jabatan']) ?>" data-foto="<?= htmlspecialchars($row['foto']) ?>" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit</button>
+                                                <a href="?hapus=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">Hapus</a>
+                                            </td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Modal Tambah -->
+                    <div class="modal fade" id="modalTambah" tabindex="-1">
+                        <div class="modal-dialog">
+                            <form action="dashboard.php" method="POST" enctype="multipart/form-data" class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Tambah Anggota</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="tambah" value="1">
+                                    <div class="mb-3">
+                                        <label>Nama</label>
+                                        <input type="text" name="nama" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Jabatan</label>
+                                        <input type="text" name="jabatan" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Foto</label>
+                                        <input type="file" name="foto" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Modal Edit -->
+                    <div class="modal fade" id="modalEdit" tabindex="-1">
+                        <div class="modal-dialog">
+                            <form action="dashboard.php" method="POST" enctype="multipart/form-data" class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Anggota</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="edit" value="1">
+                                    <input type="hidden" name="id" id="edit-id">
+                                    <div class="mb-3">
+                                        <label>Nama</label>
+                                        <input type="text" name="nama" id="edit-nama" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Jabatan</label>
+                                        <input type="text" name="jabatan" id="edit-jabatan" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Foto Saat Ini</label><br>
+                                        <img id="edit-preview" src="" width="60">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Ganti Foto</label>
+                                        <input type="file" name="foto" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Sistem desa Rajeg 2025</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="../js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <!-- <script src="../assets/demo/chart-area-demo.js"></script> -->
-        <!-- <script src="../assets/demo/chart-bar-demo.js"></script> -->
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="../js/datatables-simple-demo.js"></script>
-        <script>
-const dataPengaduan = <?= $jsonData ?>;
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="../js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <!-- <script src="../assets/demo/chart-area-demo.js"></script> -->
+    <!-- <script src="../assets/demo/chart-bar-demo.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/datatables-simple-demo.js"></script>
+    <script>
+        const dataPengaduan = <?= $jsonData ?>;
 
-const areaCtx = document.getElementById("myAreaChart").getContext("2d");
-const myChart = new Chart(areaCtx, {
-  type: "line",
-  data: {
-    labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
-    datasets: [{
-      label: "Jumlah Pengaduan",
-      backgroundColor: "rgba(78, 115, 223, 0.05)",
-      borderColor: "rgba(78, 115, 223, 1)",
-      data: dataPengaduan
-    }]
-  },
-  options: {
-    plugins: { legend: { display: false } },
-    scales: {
-      x: { grid: { display: false } },
-      y: { beginAtZero: true }
-    }
-  }
-});
-</script>
+        const areaCtx = document.getElementById("myAreaChart").getContext("2d");
+        const myChart = new Chart(areaCtx, {
+            type: "line",
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
+                datasets: [{
+                    label: "Jumlah Pengaduan",
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "rgba(78, 115, 223, 1)",
+                    data: dataPengaduan
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 
-<script>
-const dataJenisKelamin = <?= $jsonBarChart ?>;
+    <script>
+        const dataJenisKelamin = <?= $jsonBarChart ?>;
 
-const barCtx = document.getElementById("myBarChart").getContext("2d");
-new Chart(barCtx, {
-  type: "bar",
-  data: {
-    labels: ["Laki-laki", "Perempuan"],
-    datasets: [{
-      label: "Jumlah Penduduk",
-      backgroundColor: ["#4e73df", "#e74a3b"],
-      borderColor: ["#4e73df", "#e74a3b"],
-      borderWidth: 1,
-      data: dataJenisKelamin
-    }]
-  },
-  options: {
-    responsive: true,
-    plugins: { legend: { display: false } },
-    scales: {
-      x: { grid: { display: false } },
-      y: { beginAtZero: true }
-    }
-  }
-});
-</script>
+        const barCtx = document.getElementById("myBarChart").getContext("2d");
+        new Chart(barCtx, {
+            type: "bar",
+            data: {
+                labels: ["Laki-laki", "Perempuan"],
+                datasets: [{
+                    label: "Jumlah Penduduk",
+                    backgroundColor: ["#4e73df", "#e74a3b"],
+                    borderColor: ["#4e73df", "#e74a3b"],
+                    borderWidth: 1,
+                    data: dataJenisKelamin
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 
-<script>
-document.querySelectorAll('.btn-edit').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.getElementById('edit-id').value = this.dataset.id;
-    document.getElementById('edit-nama').value = this.dataset.nama;
-    document.getElementById('edit-jabatan').value = this.dataset.jabatan;
-    document.getElementById('edit-preview').src = '../uploads/' + this.dataset.foto;
-    document.getElementById('edit-foto-lama').value = this.dataset.foto;
-  });
-});
-</script>
-    </body>
+    <script>
+        document.querySelectorAll('.btn-edit').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('edit-id').value = this.dataset.id;
+                document.getElementById('edit-nama').value = this.dataset.nama;
+                document.getElementById('edit-jabatan').value = this.dataset.jabatan;
+                document.getElementById('edit-preview').src = '../uploads/' + this.dataset.foto;
+                document.getElementById('edit-foto-lama').value = this.dataset.foto;
+            });
+        });
+    </script>
+</body>
+
 </html>

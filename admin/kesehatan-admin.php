@@ -15,8 +15,8 @@ if (isset($_POST['submit_jadwal'])) {
     $tanggal = $_POST['tanggal'];
     $lokasi = $_POST['lokasi'];
     $keterangan = $_POST['keterangan'];
-    $petugas = $_POST['petugas'];   
-    $waktu = $_POST['waktu'];   
+    $petugas = $_POST['petugas'];
+    $waktu = $_POST['waktu'];
 
     $stmt = $koneksi->prepare("INSERT INTO jadwal_posyandu (tanggal, lokasi, keterangan, petugas, waktu) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $tanggal, $lokasi, $keterangan, $petugas, $waktu);
@@ -85,13 +85,13 @@ $imunisasi = $koneksi->query("SELECT * FROM data_imunisasi");
                             <label>Keterangan</label>
                             <input type="text" name="keterangan" class="form-control">
                         </div>
-                         <div class="col-md-2">
-                                <label>Petugas</label>
-                                <input type="text" name="petugas" class="form-control">
+                        <div class="col-md-2">
+                            <label>Petugas</label>
+                            <input type="text" name="petugas" class="form-control">
                         </div>
                         <div class="col-md-2">
-                                <label>Waktu</label>
-                                <input type="text" name="waktu" class="form-control">
+                            <label>Waktu</label>
+                            <input type="text" name="waktu" class="form-control">
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
                             <button name="submit_jadwal" class="btn btn-primary w-100">Simpan</button>
@@ -101,16 +101,21 @@ $imunisasi = $koneksi->query("SELECT * FROM data_imunisasi");
                 <div class="table-responsive p-3">
                     <table class="table table-bordered table-striped">
                         <thead class="table-light text-center">
-                            <tr><th>Tanggal</th><th>Lokasi</th><th>Keterangan</th><th>petugas</th></tr>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Lokasi</th>
+                                <th>Keterangan</th>
+                                <th>petugas</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <?php while ($j = $jadwal->fetch_assoc()): ?>
-                            <tr>
-                                <td><?= date('d-m-Y', strtotime($j['tanggal'])) ?></td>
-                                <td><?= htmlspecialchars($j['lokasi']) ?></td>
-                                <td><?= htmlspecialchars($j['keterangan']) ?></td>
-                                <td><?= htmlspecialchars($j['petugas']) ?></td>
-                            </tr>
+                                <tr>
+                                    <td><?= date('d-m-Y', strtotime($j['tanggal'])) ?></td>
+                                    <td><?= htmlspecialchars($j['lokasi']) ?></td>
+                                    <td><?= htmlspecialchars($j['keterangan']) ?></td>
+                                    <td><?= htmlspecialchars($j['petugas']) ?></td>
+                                </tr>
                             <?php endwhile; ?>
                         </tbody>
                     </table>
@@ -150,16 +155,21 @@ $imunisasi = $koneksi->query("SELECT * FROM data_imunisasi");
                 <div class="table-responsive p-3">
                     <table class="table table-bordered table-striped">
                         <thead class="table-light text-center">
-                            <tr><th>Nama</th><th>Kategori</th><th>Usia</th><th>Alamat</th></tr>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Kategori</th>
+                                <th>Usia</th>
+                                <th>Alamat</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <?php while ($r = $rentan->fetch_assoc()): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($r['nama']) ?></td>
-                                <td><?= htmlspecialchars($r['kategori']) ?></td>
-                                <td><?= (int)$r['usia'] ?> th</td>
-                                <td><?= htmlspecialchars($r['alamat']) ?></td>
-                            </tr>
+                                <tr>
+                                    <td><?= htmlspecialchars($r['nama']) ?></td>
+                                    <td><?= htmlspecialchars($r['kategori']) ?></td>
+                                    <td><?= (int)$r['usia'] ?> th</td>
+                                    <td><?= htmlspecialchars($r['alamat']) ?></td>
+                                </tr>
                             <?php endwhile; ?>
                         </tbody>
                     </table>
@@ -172,60 +182,60 @@ $imunisasi = $koneksi->query("SELECT * FROM data_imunisasi");
                 <div class="card-body">
                     <!-- FORM TAMBAH IMUNISASI -->
                     <form method="POST" class="row g-3">
-    <div class="col-md-3">
-        <label>Nama Orang Tua</label>
-        <input type="text" name="nama_orang_tua" class="form-control" required>
-    </div>
-    <div class="col-md-3">
-        <label>Nama Anak</label>
-        <input type="text" name="nama_anak" class="form-control" required>
-    </div>
-    <div class="col-md-2">
-        <label>Umur Anak</label>
-        <input type="number" name="umur" class="form-control" required>
-    </div>
-    <div class="col-md-4">
-        <label>Jenis Imunisasi</label>
-        <input type="text" name="jenis_imunisasi" class="form-control" required>
-    </div>
-    <div class="col-md-3">
-        <label>Tanggal Imunisasi</label>
-        <input type="date" name="tanggal_imunisasi" class="form-control" required>
-    </div>
-    <div class="col-md-5">
-        <label>Catatan</label>
-        <input type="text" name="catatan" class="form-control">
-    </div>
-    <div class="col-md-1 d-flex align-items-end">
-        <button name="submit_imunisasi" class="btn btn-primary w-100">Simpan</button>
-    </div>
-</form>
+                        <div class="col-md-3">
+                            <label>Nama Orang Tua</label>
+                            <input type="text" name="nama_orang_tua" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Nama Anak</label>
+                            <input type="text" name="nama_anak" class="form-control" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Umur Anak</label>
+                            <input type="number" name="umur" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Jenis Imunisasi</label>
+                            <input type="text" name="jenis_imunisasi" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Tanggal Imunisasi</label>
+                            <input type="date" name="tanggal_imunisasi" class="form-control" required>
+                        </div>
+                        <div class="col-md-5">
+                            <label>Catatan</label>
+                            <input type="text" name="catatan" class="form-control">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-end">
+                            <button name="submit_imunisasi" class="btn btn-primary w-100">Simpan</button>
+                        </div>
+                    </form>
 
                 </div>
                 <div class="table-responsive p-3">
                     <table class="table table-bordered table-striped">
-                                <thead class="table-light text-center">
-    <tr>
-        <th>Nama Orang Tua</th>
-        <th>Nama Anak</th>
-        <th>Umur</th>
-        <th>Jenis</th>
-        <th>Tanggal</th>
-        <th>Catatan</th>
-    </tr>
-</thead>
-<tbody>
-    <?php while ($i = $imunisasi->fetch_assoc()): ?>
-    <tr>
-        <td><?= htmlspecialchars($i['nama_orang_tua']) ?></td>
-        <td><?= htmlspecialchars($i['nama_anak']) ?></td>
-        <td><?= (int)$i['umur'] ?> th</td>
-        <td><?= htmlspecialchars($i['jenis_imunisasi']) ?></td>
-        <td><?= date('d-m-Y', strtotime($i['tanggal'])) ?></td>
-        <td><?= htmlspecialchars($i['catatan']) ?></td>
-    </tr>
-    <?php endwhile; ?>
-</tbody>
+                        <thead class="table-light text-center">
+                            <tr>
+                                <th>Nama Orang Tua</th>
+                                <th>Nama Anak</th>
+                                <th>Umur</th>
+                                <th>Jenis</th>
+                                <th>Tanggal</th>
+                                <th>Catatan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($i = $imunisasi->fetch_assoc()): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($i['nama_orang_tua']) ?></td>
+                                    <td><?= htmlspecialchars($i['nama_anak']) ?></td>
+                                    <td><?= (int)$i['umur'] ?> th</td>
+                                    <td><?= htmlspecialchars($i['jenis_imunisasi']) ?></td>
+                                    <td><?= date('d-m-Y', strtotime($i['tanggal'])) ?></td>
+                                    <td><?= htmlspecialchars($i['catatan']) ?></td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
 
                     </table>
                 </div>
