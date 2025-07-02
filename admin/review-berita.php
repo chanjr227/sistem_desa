@@ -86,10 +86,33 @@ include '../template/navbar.php';
                                             <td class="text-center"><?= htmlspecialchars($b['tanggal']) ?></td>
                                             <td><?= nl2br(htmlspecialchars(substr($b['isi'], 0, 100))) ?>...</td>
                                             <td class="text-center">
+                                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalBerita<?= $b['id'] ?>">Lihat</button>
                                                 <a href="?setujui=<?= $b['id'] ?>" class="btn btn-success btn-sm">Setujui</a>
                                                 <a href="?tolak=<?= $b['id'] ?>" class="btn btn-danger btn-sm">Tolak</a>
                                             </td>
                                         </tr>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modalBerita<?= $b['id'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $b['id'] ?>" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalLabel<?= $b['id'] ?>">Detail Berita: <?= htmlspecialchars($b['judul']) ?></h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <?php if (!empty($b['gambar'])): ?>
+                                                            <img src="../uploads/berita/<?= htmlspecialchars($b['gambar']) ?>" class="img-fluid mb-3 rounded shadow-sm" alt="Gambar Berita">
+                                                        <?php endif; ?>
+                                                        <p><?= nl2br(htmlspecialchars($b['isi'])) ?></p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a href="?setujui=<?= $b['id'] ?>" class="btn btn-success">✅ Setujui</a>
+                                                        <a href="?tolak=<?= $b['id'] ?>" class="btn btn-danger">❌ Tolak</a>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     <?php endwhile; ?>
                                     <?php if ($berita->num_rows === 0): ?>
                                         <tr>
