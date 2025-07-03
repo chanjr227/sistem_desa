@@ -1,0 +1,11 @@
+# Blokir akses file sensitif
+
+<FilesMatch "^(composer\.json|composer\.lock|\.env|package\.json|webpack\.mix\.js|readme\.md|license|phpunit\.xml)$">
+Require all denied
+</FilesMatch>
+
+# Blokir direktori yang tidak seharusnya diakses langsung
+
+RedirectMatch 403 ^/config/
+RedirectMatch 403 ^/vendor/
+RedirectMatch 403 ^/tests/
