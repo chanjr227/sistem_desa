@@ -16,7 +16,7 @@ if (isset($_GET['setujui']) || isset($_GET['tolak'])) {
     $status = isset($_GET['setujui']) ? 'disetujui' : 'ditolak';
 
     if ($status === 'disetujui') {
-        $stmt = $koneksi->prepare("SELECT userid, judul, isi FROM berita_pending WHERE id = ? AND status = 'menunggu'");
+        $stmt = $koneksi->prepare("SELECT userid, judul, gambar, isi FROM berita_pending WHERE id = ? AND status = 'menunggu'");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -24,10 +24,11 @@ if (isset($_GET['setujui']) || isset($_GET['tolak'])) {
             $data = $result->fetch_assoc();
             $judul = $data['judul'];
             $isi = $data['isi'];
+            $gambar = $data['gambar'];
             $penulis = "Warga (ID: {$data['userid']})";
 
-            $insert = $koneksi->prepare("INSERT INTO berita_desa (judul, isi, penulis, tanggal) VALUES (?, ?, ?, CURDATE())");
-            $insert->bind_param("sss", $judul, $isi, $penulis);
+            $insert = $koneksi->prepare("INSERT INTO berita_desa (judul, isi, gambar, penulis, tanggal) VALUES (?, ?, ?, ?, CURDATE())");
+            $insert->bind_param("ssss", $judul, $isi, $gambar, $penulis);
             $insert->execute();
             $insert->close();
         }
