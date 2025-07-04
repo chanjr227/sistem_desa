@@ -1,67 +1,86 @@
 <?php
-require '../config/config.php';
 session_start();
+require '../config/config.php';
 
 if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../login.php');
     exit;
 }
 
-// Ambil data log
-$query = "SELECT * FROM user_log ORDER BY waktu DESC";
-$result = $koneksi->query($query);
+$tanggal = date('Y-m-d');
+if (isset($_GET['tanggal']) && !empty($_GET['tanggal'])) {
+    $tanggal = $_GET['tanggal'];
+}
+
+$stmt = $koneksi->prepare("SELECT * FROM user_log WHERE DATE(waktu) = ? ORDER BY waktu DESC");
+$stmt->bind_param("s", $tanggal);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
+<?php include '../template/header.php'; ?>
+<?php include '../template/navbar.php'; ?>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Log Aktivitas User</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<div id="layoutSidenav">
+    <?php include '../template/sidebar.php'; ?>
 
-<body class="bg-light">
-    <div class="container py-4">
-        <h2 class="mb-4">📋 Log Aktivitas User</h2>
-        <a href="dashboard.php" class="btn btn-secondary mb-3">← Kembali ke Dashboard</a>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h2 class="my-4 text-center">📋 Log Aktivitas User</h2>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>User ID</th>
-                        <th>Aktivitas</th>
-                        <th>Waktu</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($result && $result->num_rows > 0):
-                        $no = 1;
-                        while ($row = $result->fetch_assoc()):
-                    ?>
+                <div class="card shadow-sm p-4 mb-4 bg-white">
+                    <form method="get" class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="tanggal" class="form-label fw-semibold">Pilih Tanggal</label>
+                            <input type="date" name="tanggal" id="tanggal" class="form-control" value="<?= htmlspecialchars($tanggal) ?>">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary w-100">🔍 Cari</button>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="log-aktivitas.php" class="btn btn-outline-secondary w-100">🔄 Reset</a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="table-responsive shadow rounded bg-white p-3">
+                    <table class="table table-bordered table-hover text-center align-middle">
+                        <thead class="table-primary">
                             <tr>
-                                <td><?= $no++ ?></td>
-                                <td><?= htmlspecialchars($row['nama']) ?></td>
-                                <td><?= $row['userid'] ?></td>
-                                <td><?= htmlspecialchars($row['aktivitas']) ?></td>
-                                <td><?= $row['waktu'] ?></td>
+                                <th style="width:5%;">No</th>
+                                <th>Nama</th>
+                                <th>User ID</th>
+                                <th>Aktivitas</th>
+                                <th>Waktu</th>
                             </tr>
-                        <?php
-                        endwhile;
-                    else:
-                        ?>
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">Belum ada log aktivitas.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>
+                        </thead>
+                        <tbody>
+                            <?php if ($result && $result->num_rows > 0): $no = 1; ?>
+                                <?php while ($row = $result->fetch_assoc()): ?>
+                                    <tr>
+                                        <td><?= $no++ ?></td>
+                                        <td><?= htmlspecialchars($row['nama']) ?></td>
+                                        <td><?= $row['userid'] ?></td>
+                                        <td><?= htmlspecialchars($row['aktivitas']) ?></td>
+                                        <td><?= date('d-m-Y H:i:s', strtotime($row['waktu'])) ?></td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="5" class="text-muted">Tidak ada log aktivitas pada tanggal ini.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
 
-</html>
+                <!-- <div class="mb-4 text-end">
+                    <a href="ekspor-log.php?tanggal=<?= $tanggal ?>" target="_blank" class="btn btn-danger">🖨️ Ekspor PDF</a>
+                </div> -->
+            </div>
+        </main>
+
+        <?php include '../template/footer.php'; ?>
+    </div>
+</div>

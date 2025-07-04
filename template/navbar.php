@@ -16,7 +16,9 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                 <li><a class="dropdown-item" href="#">Profil</a></li>
-                <li><hr class="dropdown-divider" /></li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
                 <li><a class="dropdown-item" href="logout.php">Logout</a></li>
             </ul>
         </li>

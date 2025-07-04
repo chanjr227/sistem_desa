@@ -133,90 +133,100 @@ $struktur = $koneksi->query("SELECT * FROM struktur_organisasi");
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
+                        <!-- DASHBOARD -->
                         <div class="sb-sidenav-menu-heading">Halaman utama</div>
                         <a class="nav-link" href="dashboard.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Dashboard admin
+                            Dashboard Admin
                         </a>
+
+                        <!-- PENGADUAN & BENCANA -->
                         <div class="sb-sidenav-menu-heading">Menu Pengaduan dan Laporan Bencana</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Menu
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePengaduan" aria-expanded="false">
+                            <div class="sb-nav-link-icon"><i class="fas fa-exclamation-circle"></i></div>
+                            Menu Pengaduan
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <div class="collapse" id="collapsePengaduan" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="layanan-pengaduan-admin.php">Layanan Pengaduan</a>
                                 <a class="nav-link" href="laporan-bencana-admin.php">Laporan Bencana</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Menu layanan Kesehatan
+
+                        <!-- KESEHATAN -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseKesehatan" aria-expanded="false">
+                            <div class="sb-nav-link-icon"><i class="fas fa-heartbeat"></i></div>
+                            Menu Layanan Kesehatan
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <div class="collapse" id="collapseKesehatan" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="kesehatan-admin.php">Layanan kesehatans</a>
+                                <a class="nav-link" href="kesehatan-admin.php">Layanan Kesehatan</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                            Penduduk dan surat
+
+                        <!-- PENDUDUK & SURAT -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePenduduk" aria-expanded="false">
+                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                            Penduduk dan Surat
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                        <div class="collapse" id="collapsePenduduk" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPenduduk">
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePendudukSub" aria-expanded="false">
                                     Tambah Penduduk
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
-                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <div class="collapse" id="collapsePendudukSub" data-bs-parent="#sidenavAccordionPenduduk">
                                     <nav class="sb-sidenav-menu-nested nav">
                                         <a class="nav-link" href="tambah-penduduk-admin.php">Tambah Penduduk</a>
                                     </nav>
                                 </div>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                    surat pengantar dan jadwal kegiatan
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSuratSub" aria-expanded="false">
+                                    Surat Pengantar & Jadwal Kegiatan
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
-                                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <div class="collapse" id="collapseSuratSub" data-bs-parent="#sidenavAccordionPenduduk">
                                     <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="pengajuan-surat-admin.php">Surat pengantarr</a>
-                                        <a class="nav-link" href="jadwal-kegiatan-admin.php">Jadwal kegiatan</a>
+                                        <a class="nav-link" href="pengajuan-surat-admin.php">Surat Pengantar</a>
+                                        <a class="nav-link" href="jadwal-kegiatan-admin.php">Jadwal Kegiatan</a>
                                     </nav>
                                 </div>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                            Log
+
+                        <!-- LOG & BERITA -->
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLog" aria-expanded="false">
+                            <div class="sb-nav-link-icon"><i class="fas fa-history"></i></div>
+                            Log & Berita
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                    menu log dan berita
+                        <div class="collapse" id="collapseLog" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionLog">
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLogSub" aria-expanded="false">
+                                    Menu Log
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
-                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <div class="collapse" id="collapseLogSub" data-bs-parent="#sidenavAccordionLog">
                                     <nav class="sb-sidenav-menu-nested nav">
                                         <a class="nav-link" href="log-user.php">Menu Log User</a>
                                     </nav>
                                 </div>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                    Tambah berita dan review berita
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBeritaSub" aria-expanded="false">
+                                    Tambah & Review Berita
                                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                 </a>
-                                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                <div class="collapse" id="collapseBeritaSub" data-bs-parent="#sidenavAccordionLog">
                                     <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="tambah-berita.php">Tambah berita</a>
-                                        <a class="nav-link" href="review-berita.php">Review berita</a>
+                                        <a class="nav-link" href="tambah-berita.php">Tambah Berita</a>
+                                        <a class="nav-link" href="review-berita.php">Review Berita</a>
                                     </nav>
                                 </div>
                             </nav>
                         </div>
                     </div>
+
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Login sebagai:</div>
