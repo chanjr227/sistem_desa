@@ -18,4 +18,3 @@ if (!$koneksi) {
 
 // Base URL (ganti jika online atau pindah folder)
 $main_url = 'http://localhost/sistem_desa/';
-?>

@@ -4,12 +4,10 @@ require '../config/config.php';
 require '../helpers/log_helpers.php';
 
 $nama_user = $_SESSION['nama'] ?? 'Warga';
-
-// Inisialisasi variabel
+$userid = $_SESSION['userid'] ?? null;
 $success = '';
 $error = '';
-$nama_karyawan = '';
-$jabatan_karyawan = '';
+$id_karyawan = '';
 $isi_pengaduan = '';
 
 // CSRF token
@@ -17,27 +15,41 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
+// Ambil data karyawan dari DB
+$karyawan = [];
+$result = $koneksi->query("SELECT id, nama, jabatan FROM karyawan ORDER BY nama ASC");
+while ($row = $result->fetch_assoc()) {
+    $karyawan[] = $row;
+}
+
 // Proses form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         $error = 'Token CSRF tidak valid.';
     } else {
-        $nama_karyawan = trim($_POST['nama_karyawan']);
-        $jabatan_karyawan = trim($_POST['jabatan_karyawan']);
+        $id_karyawan = intval($_POST['id_karyawan']);
         $isi_pengaduan = trim($_POST['isi_pengaduan']);
-        $userid = $_SESSION['userid'] ?? null;
         $tanggal_pengaduan = date('Y-m-d');
 
-        if (!$nama_karyawan || !$jabatan_karyawan || !$isi_pengaduan || !$userid) {
+        if (!$id_karyawan || !$isi_pengaduan || !$userid) {
             $error = 'Semua kolom wajib diisi.';
         } else {
-            $stmt = $koneksi->prepare("INSERT INTO pengaduan (userid, nama_karyawan, jabatan_karyawan, isi_pengaduan, tanggal_pengaduan) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("issss", $userid, $nama_karyawan, $jabatan_karyawan, $isi_pengaduan, $tanggal_pengaduan);
+            $stmt = $koneksi->prepare("INSERT INTO pengaduan (userid, id_karyawan, isi_pengaduan, tanggal_pengaduan) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("iiss", $userid, $id_karyawan, $isi_pengaduan, $tanggal_pengaduan);
 
             if ($stmt->execute()) {
+                // Ambil nama karyawan untuk log
+                $nama_karyawan_log = '';
+                foreach ($karyawan as $k) {
+                    if ($k['id'] == $id_karyawan) {
+                        $nama_karyawan_log = $k['nama'] . ' - ' . $k['jabatan'];
+                        break;
+                    }
+                }
+
+                simpan_log($koneksi, $userid, $nama_user, 'Mengirim pengaduan terhadap: ' . $nama_karyawan_log);
                 $success = "✅ Pengaduan berhasil dikirim.";
-                simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Mengirim pengaduan terhadap karyawan: ' . $nama_karyawan);
-                $nama_karyawan = $jabatan_karyawan = $isi_pengaduan = '';
+                $id_karyawan = $isi_pengaduan = ''; // reset form
             } else {
                 $error = "❌ Gagal mengirim pengaduan.";
             }
@@ -94,6 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </nav>
+
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
@@ -107,32 +120,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endif; ?>
 
                     <form method="POST" novalidate>
-                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
                         <div class="mb-3">
-                            <label for="nama_karyawan" class="form-label">Nama Karyawan</label>
-                            <input type="text" name="nama_karyawan" id="nama_karyawan" class="form-control"
-                                value="<?= htmlspecialchars($nama_karyawan) ?>" required placeholder="Masukkan nama lengkap karyawan">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="jabatan_karyawan" class="form-label">Jabatan Karyawan</label>
-                            <input type="text" name="jabatan_karyawan" id="jabatan_karyawan" class="form-control"
-                                value="<?= htmlspecialchars($jabatan_karyawan) ?>" required placeholder="Contoh: Staf Pelayanan Publik">
+                            <label for="id_karyawan" class="form-label">Pilih Karyawan</label>
+                            <select name="id_karyawan" id="id_karyawan" class="form-select" required>
+                                <option value="">-- Pilih Karyawan --</option>
+                                <?php foreach ($karyawan as $k): ?>
+                                    <option value="<?= $k['id'] ?>" <?= $id_karyawan == $k['id'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($k['nama']) ?> - <?= htmlspecialchars($k['jabatan']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="isi_pengaduan" class="form-label">Isi Pengaduan</label>
                             <textarea name="isi_pengaduan" id="isi_pengaduan" rows="5" class="form-control" required
-                                placeholder="Tulis keluhan atau pengaduan Anda secara detail..."><?= htmlspecialchars($isi_pengaduan) ?></textarea>
+                                placeholder="Tulis pengaduan atau keluhan Anda secara detail..."><?= htmlspecialchars($isi_pengaduan) ?></textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 fw-semibold">📨 Kirim Pengaduan</button>
                     </form>
-                    <!-- 
-                <div class="text-center mt-3">
-                    <a href="../index.php" class="btn btn-outline-secondary">← Kembali ke Dashboard</a>
-                </div> -->
                 </div>
             </div>
         </div>

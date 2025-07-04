@@ -211,6 +211,7 @@ $struktur = $koneksi->query("SELECT * FROM struktur_organisasi");
                                 <div class="collapse" id="collapseLogSub" data-bs-parent="#sidenavAccordionLog">
                                     <nav class="sb-sidenav-menu-nested nav">
                                         <a class="nav-link" href="log-user.php">Menu Log User</a>
+                                        <a class="nav-link" href="tambah_karyawan.php">Tambah karyawan</a>
                                     </nav>
                                 </div>
                                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBeritaSub" aria-expanded="false">
