@@ -1,9 +1,14 @@
 <?php
 session_start();
+require '../config/config.php';
+
 if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
     header('Location: ../login.php');
     exit;
 }
+
+$struktur = $koneksi->query("SELECT id, nama, jabatan, nip, jenis_kelamin, tanggal_lahir, alamat, foto FROM karyawan ORDER BY id");
+
 
 require_once '../config/config.php'; // pastikan koneksi di-include
 
@@ -82,9 +87,6 @@ if (isset($_GET['hapus'])) {
     header("Location: dashboard.php");
     exit;
 }
-
-// Ambil data struktur
-$struktur = $koneksi->query("SELECT * FROM struktur_organisasi");
 ?>
 
 <!DOCTYPE html>
@@ -353,6 +355,10 @@ $struktur = $koneksi->query("SELECT * FROM struktur_organisasi");
                                     <tr>
                                         <th>Nama</th>
                                         <th>Jabatan</th>
+                                        <th>NIP</th>
+                                        <th>Jenis Kelamin</th>
+                                        <th>Tanggal Lahir</th>
+                                        <th>Alamat</th>
                                         <th>Foto</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -362,86 +368,24 @@ $struktur = $koneksi->query("SELECT * FROM struktur_organisasi");
                                         <tr>
                                             <td><?= htmlspecialchars($row['nama']) ?></td>
                                             <td><?= htmlspecialchars($row['jabatan']) ?></td>
+                                            <td><?= htmlspecialchars($row['nama']) ?></td>
+                                            <td><?= htmlspecialchars($row['jabatan']) ?></td>
+                                            <td><?= htmlspecialchars($row['nip']) ?></td>
+                                            <td><?= htmlspecialchars($row['jenis_kelamin']) ?></td>
+                                            <td><?= htmlspecialchars($row['tanggal_lahir']) ?></td>
+                                            <td><?= htmlspecialchars($row['alamat']) ?></td>
                                             <td>
                                                 <?php if ($row['foto']): ?>
-                                                    <img src="../uploads/<?= htmlspecialchars($row['foto']) ?>" width="50" height="50" style="border-radius: 50%">
+                                                    <img src="../uploads/foto_karyawan htmlspecialchars($row['foto']) ?>" width="50" height="50" style="border-radius: 50%">
                                                 <?php else: ?>
                                                     <span>Tidak ada</span>
                                                 <?php endif; ?>
                                             </td>
-                                            <td>
-                                                <button class="btn btn-warning btn-sm btn-edit" data-id="<?= $row['id'] ?>" data-nama="<?= htmlspecialchars($row['nama']) ?>" data-jabatan="<?= htmlspecialchars($row['jabatan']) ?>" data-foto="<?= htmlspecialchars($row['foto']) ?>" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit</button>
-                                                <a href="?hapus=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">Hapus</a>
-                                            </td>
                                         </tr>
                                     <?php endwhile; ?>
+
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-
-                    <!-- Modal Tambah -->
-                    <div class="modal fade" id="modalTambah" tabindex="-1">
-                        <div class="modal-dialog">
-                            <form action="dashboard.php" method="POST" enctype="multipart/form-data" class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Tambah Anggota</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" name="tambah" value="1">
-                                    <div class="mb-3">
-                                        <label>Nama</label>
-                                        <input type="text" name="nama" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Jabatan</label>
-                                        <input type="text" name="jabatan" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Foto</label>
-                                        <input type="file" name="foto" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Modal Edit -->
-                    <div class="modal fade" id="modalEdit" tabindex="-1">
-                        <div class="modal-dialog">
-                            <form action="dashboard.php" method="POST" enctype="multipart/form-data" class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Edit Anggota</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" name="edit" value="1">
-                                    <input type="hidden" name="id" id="edit-id">
-                                    <div class="mb-3">
-                                        <label>Nama</label>
-                                        <input type="text" name="nama" id="edit-nama" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Jabatan</label>
-                                        <input type="text" name="jabatan" id="edit-jabatan" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Foto Saat Ini</label><br>
-                                        <img id="edit-preview" src="" width="60">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label>Ganti Foto</label>
-                                        <input type="file" name="foto" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                                </div>
-                            </form>
                         </div>
                     </div>
 

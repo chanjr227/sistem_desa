@@ -48,20 +48,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bulk_delete']) && !em
 if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
     $search = trim($_GET['search']);
     $stmt = $koneksi->prepare("
-        SELECT id, userid, nama_karyawan, jabatan_karyawan, isi_pengaduan, tanggal_pengaduan
-        FROM pengaduan
-        WHERE nama_karyawan LIKE CONCAT('%', ?, '%')
-        ORDER BY tanggal_pengaduan DESC
-    ");
+    SELECT p.id, p.userid, k.nama AS nama_karyawan, k.jabatan AS jabatan_karyawan, p.isi_pengaduan, p.tanggal_pengaduan
+    FROM pengaduan p
+    JOIN karyawan k ON p.id_karyawan = k.id
+    WHERE k.nama LIKE CONCAT('%', ?, '%')
+    ORDER BY p.tanggal_pengaduan DESC
+");
+
     $stmt->bind_param("s", $search);
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
     $result = $koneksi->query("
-        SELECT id, userid, nama_karyawan, jabatan_karyawan, isi_pengaduan, tanggal_pengaduan
-        FROM pengaduan
-        ORDER BY tanggal_pengaduan DESC
-    ");
+    SELECT p.id, p.userid, k.nama AS nama_karyawan, k.jabatan AS jabatan_karyawan, p.isi_pengaduan, p.tanggal_pengaduan
+    FROM pengaduan p
+    JOIN karyawan k ON p.id_karyawan = k.id
+    ORDER BY p.tanggal_pengaduan DESC
+");
 }
 
 ?>

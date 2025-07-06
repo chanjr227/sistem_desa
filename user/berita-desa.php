@@ -7,6 +7,8 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
     exit;
 }
 
+$nama_user = $_SESSION['nama'] ?? 'Warga';
+
 $query = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DESC");
 ?>
 
@@ -23,6 +25,18 @@ $query = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DESC
 
 <body class="bg-gray-100 overflow-x-hidden">
 
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white px-4 py-3 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
+            <a href="../index.php" class="text-lg font-bold">Sistem Informasi Desa</a>
+            <div class="flex items-center space-x-4 mt-2 sm:mt-0">
+                <span>Halo, <?= htmlspecialchars($nama_user) ?></span>
+                <a href="../index.php" class="bg-white text-blue-600 px-3 py-1 rounded text-sm hover:bg-gray-100 transition">← Kembali</a>
+                <a href="logout.php" class="bg-red-500 px-3 py-1 rounded text-sm hover:bg-red-600 transition">Logout</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="max-w-7xl mx-auto px-4 py-8">
         <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">📰 Semua Berita Desa</h2>
 
@@ -31,7 +45,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DESC
                 <?php while ($berita = mysqli_fetch_assoc($query)): ?>
                     <div class="bg-white rounded-2xl shadow hover:shadow-lg transition duration-300 flex flex-col">
                         <?php
-                        $gambarPath = "../" . ltrim($berita['gambar'], '/'); // Perbaikan path
+                        $gambarPath = "../" . ltrim($berita['gambar'], '/');
                         if (!empty($berita['gambar']) && file_exists($gambarPath)): ?>
                             <img src="<?= htmlspecialchars($gambarPath) ?>" alt="Gambar Berita" class="h-48 w-full object-cover rounded-t-2xl">
                         <?php else: ?>
