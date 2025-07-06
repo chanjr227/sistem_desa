@@ -346,8 +346,7 @@ if (isset($_GET['hapus'])) {
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-sitemap me-1"></i>
-                            Struktur Organisasi
-                            <button class="btn btn-sm btn-success float-end" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah</button>
+                            Struktur Desa Rajeg
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered">
@@ -360,14 +359,11 @@ if (isset($_GET['hapus'])) {
                                         <th>Tanggal Lahir</th>
                                         <th>Alamat</th>
                                         <th>Foto</th>
-                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php while ($row = $struktur->fetch_assoc()): ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($row['nama']) ?></td>
-                                            <td><?= htmlspecialchars($row['jabatan']) ?></td>
                                             <td><?= htmlspecialchars($row['nama']) ?></td>
                                             <td><?= htmlspecialchars($row['jabatan']) ?></td>
                                             <td><?= htmlspecialchars($row['nip']) ?></td>
