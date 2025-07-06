@@ -52,11 +52,36 @@ if (isset($_POST['submit_imunisasi'])) {
     $stmt->close();
 }
 
+// ==== PAGINATION: Jadwal Posyandu ====
+$limit_jadwal = 5;
+$page_jadwal = isset($_GET['page_jadwal']) ? (int)$_GET['page_jadwal'] : 1;
+$offset_jadwal = ($page_jadwal - 1) * $limit_jadwal;
 
-// Ambil data
-$jadwal = $koneksi->query("SELECT * FROM jadwal_posyandu ORDER BY tanggal ASC");
-$rentan = $koneksi->query("SELECT * FROM warga_rentan");
-$imunisasi = $koneksi->query("SELECT * FROM data_imunisasi");
+$total_jadwal = $koneksi->query("SELECT COUNT(*) as total FROM jadwal_posyandu")->fetch_assoc()['total'];
+$totalPages_jadwal = ceil($total_jadwal / $limit_jadwal);
+
+$jadwal = $koneksi->query("SELECT * FROM jadwal_posyandu ORDER BY tanggal ASC LIMIT $limit_jadwal OFFSET $offset_jadwal");
+
+// ==== PAGINATION: Warga Rentan ====
+$limit_rentan = 5;
+$page_rentan = isset($_GET['page_rentan']) ? (int)$_GET['page_rentan'] : 1;
+$offset_rentan = ($page_rentan - 1) * $limit_rentan;
+
+$total_rentan = $koneksi->query("SELECT COUNT(*) as total FROM warga_rentan")->fetch_assoc()['total'];
+$totalPages_rentan = ceil($total_rentan / $limit_rentan);
+
+$rentan = $koneksi->query("SELECT * FROM warga_rentan LIMIT $limit_rentan OFFSET $offset_rentan");
+
+// ==== PAGINATION: Imunisasi ====
+$limit_imun = 5;
+$page_imun = isset($_GET['page_imunisasi']) ? (int)$_GET['page_imunisasi'] : 1;
+$offset_imun = ($page_imun - 1) * $limit_imun;
+
+$total_imun = $koneksi->query("SELECT COUNT(*) as total FROM data_imunisasi")->fetch_assoc()['total'];
+$totalPages_imun = ceil($total_imun / $limit_imun);
+
+$imunisasi = $koneksi->query("SELECT * FROM data_imunisasi LIMIT $limit_imun OFFSET $offset_imun");
+
 ?>
 
 <?php include '../template/header.php'; ?>
@@ -100,6 +125,16 @@ $imunisasi = $koneksi->query("SELECT * FROM data_imunisasi");
                 </div>
                 <div class="table-responsive p-3">
                     <table class="table table-bordered table-striped">
+                        <!-- Pagination Jadwal -->
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                <?php for ($p = 1; $p <= $totalPages_jadwal; $p++): ?>
+                                    <li class="page-item <?= $p == $page_jadwal ? 'active' : '' ?>">
+                                        <a class="page-link" href="?page_jadwal=<?= $p ?>"><?= $p ?></a>
+                                    </li>
+                                <?php endfor; ?>
+                            </ul>
+                        </nav>
                         <thead class="table-light text-center">
                             <tr>
                                 <th>Tanggal</th>
@@ -153,6 +188,16 @@ $imunisasi = $koneksi->query("SELECT * FROM data_imunisasi");
                     </form>
                 </div>
                 <div class="table-responsive p-3">
+                    <!-- Pagination Rentan -->
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            <?php for ($p = 1; $p <= $totalPages_rentan; $p++): ?>
+                                <li class="page-item <?= $p == $page_rentan ? 'active' : '' ?>">
+                                    <a class="page-link" href="?page_rentan=<?= $p ?>"><?= $p ?></a>
+                                </li>
+                            <?php endfor; ?>
+                        </ul>
+                    </nav>
                     <table class="table table-bordered table-striped">
                         <thead class="table-light text-center">
                             <tr>
@@ -214,6 +259,16 @@ $imunisasi = $koneksi->query("SELECT * FROM data_imunisasi");
                 </div>
                 <div class="table-responsive p-3">
                     <table class="table table-bordered table-striped">
+                        <!-- Pagination Rentan -->
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                <?php for ($p = 1; $p <= $totalPages_rentan; $p++): ?>
+                                    <li class="page-item <?= $p == $page_rentan ? 'active' : '' ?>">
+                                        <a class="page-link" href="?page_rentan=<?= $p ?>"><?= $p ?></a>
+                                    </li>
+                                <?php endfor; ?>
+                            </ul>
+                        </nav>
                         <thead class="table-light text-center">
                             <tr>
                                 <th>Nama Orang Tua</th>
