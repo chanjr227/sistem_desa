@@ -1,11 +1,9 @@
 <?php
 session_start();
 require '../config/config.php';
+require '../helpers/auth_helpers.php';
+check_access(['admin', 'rt', 'staff_desa']);
 
-if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../login.php');
-    exit;
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $judul = htmlspecialchars(trim($_POST['judul']));

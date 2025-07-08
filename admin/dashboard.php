@@ -1,16 +1,12 @@
 <?php
 session_start();
 require '../config/config.php';
+require '../helpers/auth_helpers.php';
+check_access(['admin', 'staff_desa', 'rt']);
 
-if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../login.php');
-    exit;
-}
 
 $struktur = $koneksi->query("SELECT id, nama, jabatan, nip, jenis_kelamin, tanggal_lahir, alamat, foto FROM karyawan ORDER BY id");
 
-
-require_once '../config/config.php'; // pastikan koneksi di-include
 
 // Lanjutkan dengan query data
 $pengaduanPerBulan = array_fill(1, 12, 0);
@@ -214,6 +210,7 @@ if (isset($_GET['hapus'])) {
                                     <nav class="sb-sidenav-menu-nested nav">
                                         <a class="nav-link" href="log-user.php">Menu Log User</a>
                                         <a class="nav-link" href="tambah_karyawan.php">Tambah karyawan</a>
+                                        <a class="nav-link" href="pengaturan-akun-staff.php">Tambah akun</a>
                                     </nav>
                                 </div>
                                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBeritaSub" aria-expanded="false">

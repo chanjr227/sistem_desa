@@ -1,5 +1,7 @@
 <?php
 require '../config/config.php';
+require '../helpers/auth_helpers.php';
+check_access(['admin', 'rt']);
 
 // Cegah SQL injection
 $id = intval($_GET['id']);

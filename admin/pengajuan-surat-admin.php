@@ -1,12 +1,8 @@
 <?php
 session_start();
 require '../config/config.php';
-
-// Pastikan admin login
-if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../login.php");
-    exit;
-}
+require '../helpers/auth_helpers.php';
+check_access(['admin', 'rt']);
 
 // Ambil status dari filter GET
 $statusFilter = $_GET['status'] ?? '';

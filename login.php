@@ -10,12 +10,9 @@ if (isset($_GET['timeout'])) {
 }
 // Broken Access Control 
 // Redirect jika sudah login
-if (isset($_SESSION['log'])) {
-    if ($_SESSION['role'] === 'admin') {
-        header('Location: admin/dashboard.php');
-    } else {
-        header('Location: index.php');
-    }
+
+if (isset($_SESSION['log']) && in_array($_SESSION['role'], ['admin', 'staff_desa', 'rt'])) {
+    header('Location: admin/dashboard.php');
     exit;
 }
 
@@ -52,12 +49,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Security Logging & Monitoring – [OWASP A09]
             simpan_log($koneksi, $data['userid'], $data['name'], 'Login berhasil');
 
-            if ($data['role'] === 'admin') {
+            if (in_array($data['role'], ['admin', 'staff_desa', 'rt'])) {
                 header('Location: admin/dashboard.php');
             } else {
                 $_SESSION['login_success'] = "Login berhasil. Selamat datang!";
                 header('Location: index.php');
             }
+
             exit;
         } else {
             //Brute Force Protection 

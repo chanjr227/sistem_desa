@@ -1,11 +1,8 @@
 <?php
-require '../config/config.php';
 session_start();
-
-if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../login.php');
-    exit;
-}
+require '../config/config.php';
+require '../helpers/auth_helpers.php';
+check_access(['admin']);
 
 $result = $koneksi->query("SELECT user_log.*, users.email FROM user_log JOIN users ON user_log.userid = users.userid ORDER BY waktu DESC");
 ?>

@@ -1,12 +1,9 @@
 <?php
 session_start();
 require '../config/config.php';
+require '../helpers/auth_helpers.php';
+check_access(['admin', 'staff_desa']);
 
-// Cek apakah user sudah login dan merupakan admin
-if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'admin') {
-  header('Location: ../login.php');
-  exit;
-}
 ?>
 
 
