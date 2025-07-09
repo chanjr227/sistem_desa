@@ -10,6 +10,67 @@
   transform: translateY(0);
 }
 
+.visi-box,
+.misi-box {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 30px 25px;
+  border: 1px solid #e2e8f0; /* border abu tipis */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* bayangan lembut tapi kelihatan */
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+}
+
+.visi-box:hover,
+.misi-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12); /* bayangan saat hover */
+}
+.visi-box .icon,
+.misi-box .icon {
+  font-size: 36px;
+  color: #dc3545;
+}
+
+.visi-box h5,
+.misi-box h5 {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.visi-box p {
+  font-style: italic;
+  color: #555;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.misi-list {
+  padding-left: 0;
+  margin-top: 15px;
+  font-size: 15.5px;
+  color: #444;
+}
+
+.misi-list li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+.misi-list .number {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #dc3545;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 12px;
+  width: 22px;
+  height: 22px;
+  text-align: center;
+  line-height: 22px;
+  font-weight: bold;
+}
+
 /* ===== Box Sambutan ===== */
 .sambutan-box {
   background-color: #f8f9fa;

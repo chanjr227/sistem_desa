@@ -44,6 +44,7 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link href="css/user.css" rel="stylesheet" />
     <link href="css/hero.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
@@ -55,23 +56,36 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
         <?php unset($_SESSION['login_success']); ?>
     <?php endif; ?>
     <!---- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center">
-            <a class="navbar-brand" href="#">Sistem Informasi Desa</a>
-            <div class="d-flex flex-wrap align-items-center">
-                <span class="navbar-text text-white me-3">Halo, <?= htmlspecialchars($nama_user) ?></span>
+    <!-- Tambahkan di dalam <body> -->
+    <nav class="bg-blue-800 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
+                <a href="#" class="text-xl font-semibold hover:text-blue-200 transition">Sistem Informasi Desa</a>
 
-                <?php if (isset($_SESSION['log']) && $_SESSION['role'] === 'user'): ?>
-                    <a href="user/kirim-berita.php" class="btn btn-light btn-sm me-2">
-                        <i class="fa-solid fa-pen-to-square"></i> Kirim Berita
-                    </a>
-                <?php endif; ?>
+                <!-- Kanan -->
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm sm:text-base">👋 Halo, <?= htmlspecialchars($nama_user) ?></span>
 
-                <?php if (isset($_SESSION['log']) && $_SESSION['log'] === true): ?>
-                    <a href="user/logout.php" class="btn btn-outline-light btn-sm">Logout</a>
-                <?php else: ?>
-                    <a href="login.php" class="btn btn-outline-light btn-sm">Login</a>
-                <?php endif; ?>
+                    <?php if (isset($_SESSION['log']) && $_SESSION['role'] === 'user'): ?>
+                        <a href="user/kirim-berita.php"
+                            class="bg-white text-blue-800 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-100 transition">
+                            <i class="fa-solid fa-pen-to-square"></i> Kirim Berita
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['log']) && $_SESSION['log'] === true): ?>
+                        <a href="user/logout.php"
+                            class="border border-white text-white px-3 py-1.5 rounded-md text-sm hover:bg-white hover:text-blue-800 transition">
+                            Logout
+                        </a>
+                    <?php else: ?>
+                        <a href="login.php"
+                            class="border border-white text-white px-3 py-1.5 rounded-md text-sm hover:bg-white hover:text-blue-800 transition">
+                            Login
+                        </a>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </nav>
@@ -260,6 +274,44 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
                 <p class="text-end"><strong>– Bapak Yanyan, Kepala Desa</strong></p>
             </div>
 
+            <!-- Visi & Misi -->
+            <div class="container py-4 fade-in visible">
+                <div class="row g-4 justify-content-center">
+
+                    <!-- Visi -->
+                    <div class="col-md-6">
+                        <div class="card shadow-sm border-0 p-4 text-center visi-box h-100">
+                            <div class="icon mb-3 text-danger">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                            <h5 class="fw-bold">Visi Desa</h5>
+                            <p class="fst-italic text-muted mt-3">
+                                "Mewujudkan Desa Rajeg yang mandiri, sejahtera, dan berbudaya melalui pembangunan berbasis kearifan lokal dan partisipasi masyarakat."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Misi -->
+                    <div class="col-md-6">
+                        <div class="card shadow-sm border-0 p-4 text-start misi-box h-100">
+                            <div class="icon mb-3 text-danger text-center">
+                                <i class="fa-solid fa-file-lines"></i>
+                            </div>
+                            <h5 class="fw-bold text-center">Misi Desa</h5>
+                            <ul class="misi-list ps-3">
+                                <li><span class="number"></span> Meningkatkan kualitas pelayanan publik yang transparan dan akuntabel.</li>
+                                <li><span class="number"></span> Mendorong partisipasi aktif masyarakat dalam pembangunan desa.</li>
+                                <li><span class="number"></span> Mengembangkan potensi ekonomi lokal yang berkelanjutan.</li>
+                                <li><span class="number"></span> Memperkuat nilai-nilai budaya dan kearifan lokal dalam kehidupan bermasyarakat.</li>
+                                <li><span class="number"></span> Meningkatkan kualitas infrastruktur dan lingkungan hidup desa.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
             <div class="container py-4">
                 <h2 class="text-center mb-4">Struktur Organisasi Desa</h2>
 
@@ -313,10 +365,57 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
                 </div>
             </div>
 
-            <footer class="mt-5 text-center text-muted">
-                <hr>
-                <small>&copy; <?= date('Y') ?> Sistem Informasi Desa - Dibuat oleh Kelompok 1</small>
+            <!-- Footer Tailwind -->
+            <footer class="bg-blue-800 text-white mt-10 pt-10 pb-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+
+                        <!-- Logo dan Deskripsi -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-tree-city text-green-400"></i>
+                                Sistem Informasi Desa
+                            </h3>
+                            <p class="text-sm text-blue-200 leading-relaxed">
+                                Sistem informasi digital Desa Rajeg untuk layanan publik yang cepat, transparan, dan inklusif.
+                            </p>
+                        </div>
+
+                        <!-- Navigasi Cepat -->
+                        <div>
+                            <h4 class="text-white font-semibold text-lg mb-3">Menu Cepat</h4>
+                            <ul class="space-y-2 text-sm text-blue-200">
+                                <li><a href="#sambutan" class="hover:text-white transition">Sambutan</a></li>
+                                <li><a href="#visi" class="hover:text-white transition">Visi & Misi</a></li>
+                                <li><a href="#struktur" class="hover:text-white transition">Struktur Organisasi</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Kontak Desa -->
+                        <div>
+                            <h4 class="text-white font-semibold text-lg mb-3">Kontak Desa</h4>
+                            <ul class="text-sm text-blue-200 space-y-1">
+                                <li><i class="fa-solid fa-location-dot me-2 text-green-400"></i> Jl. Raya Rajeg No. 1</li>
+                                <li><i class="fa-solid fa-phone me-2 text-green-400"></i> (021) 1234 5678</li>
+                                <li><i class="fa-solid fa-envelope me-2 text-green-400"></i> desa.rajeg@example.com</li>
+                            </ul>
+                            <div class="flex space-x-4 mt-3 text-lg">
+                                <a href="#" class="hover:text-white"><i class="fab fa-facebook"></i></a>
+                                <a href="#" class="hover:text-white"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr class="border-blue-700 my-6">
+
+                    <p class="text-center text-sm text-blue-200">
+                        &copy; <?= date('Y') ?> <strong>Desa Rajeg</strong>. Dibuat oleh <span class="text-white font-semibold">Kelompok 1</span>.
+                    </p>
+                </div>
             </footer>
+
         </div>
 
         <script>
