@@ -57,35 +57,33 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
     <?php endif; ?>
     <!---- navbar -->
     <!-- Tambahkan di dalam <body> -->
-    <nav class="bg-blue-800 text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <!-- Logo -->
-                <a href="#" class="text-xl font-semibold hover:text-blue-200 transition">Sistem Informasi Desa</a>
+    <nav class="bg-blue-600 text-white shadow py-4 px-6">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
+            <!-- Kiri -->
+            <a href="#" class="text-lg font-semibold hover:underline">Sistem Informasi Desa</a>
 
-                <!-- Kanan -->
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm sm:text-base">👋 Halo, <?= htmlspecialchars($nama_user) ?></span>
+            <!-- Kanan -->
+            <div class="flex items-center flex-wrap gap-3 mt-2 sm:mt-0">
+                <span class="text-sm sm:text-base">👋 Halo, <?= htmlspecialchars($nama_user) ?></span>
 
-                    <?php if (isset($_SESSION['log']) && $_SESSION['role'] === 'user'): ?>
-                        <a href="user/kirim-berita.php"
-                            class="bg-white text-blue-800 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-100 transition">
-                            <i class="fa-solid fa-pen-to-square"></i> Kirim Berita
-                        </a>
-                    <?php endif; ?>
+                <?php if (isset($_SESSION['log']) && $_SESSION['role'] === 'user'): ?>
+                    <a href="user/kirim-berita.php"
+                        class="bg-white text-blue-600 px-3 py-1.5 rounded text-sm font-medium hover:bg-gray-100 transition">
+                        <i class="fa-solid fa-pen-to-square"></i> Kirim Berita
+                    </a>
+                <?php endif; ?>
 
-                    <?php if (isset($_SESSION['log']) && $_SESSION['log'] === true): ?>
-                        <a href="user/logout.php"
-                            class="border border-white text-white px-3 py-1.5 rounded-md text-sm hover:bg-white hover:text-blue-800 transition">
-                            Logout
-                        </a>
-                    <?php else: ?>
-                        <a href="login.php"
-                            class="border border-white text-white px-3 py-1.5 rounded-md text-sm hover:bg-white hover:text-blue-800 transition">
-                            Login
-                        </a>
-                    <?php endif; ?>
-                </div>
+                <?php if (isset($_SESSION['log']) && $_SESSION['log'] === true): ?>
+                    <a href="user/logout.php"
+                        class="border border-white text-white px-3 py-1.5 rounded text-sm hover:bg-white hover:text-blue-600 transition">
+                        Logout
+                    </a>
+                <?php else: ?>
+                    <a href="login.php"
+                        class="border border-white text-white px-3 py-1.5 rounded text-sm hover:bg-white hover:text-blue-600 transition">
+                        Login
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </nav>

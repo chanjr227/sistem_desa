@@ -8,66 +8,87 @@ if (!isset($_SESSION['log']) || $_SESSION['role'] !== 'user') {
 }
 
 $nama_user = $_SESSION['nama'] ?? 'Warga';
-
 $query = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DESC");
+$berita_utama = mysqli_fetch_assoc($query);
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Semua Berita Desa</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Tailwind CSS CDN -->
+    <meta charset="UTF-8" />
+    <title>Berita Desa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
-<body class="bg-gray-100 overflow-x-hidden">
+<body class="bg-gray-100 font-sans">
 
-    <!-- Navbar -->
-    <nav class="bg-blue-600 text-white px-4 py-3 shadow-md">
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
-            <a href="../index.php" class="text-lg font-bold">Sistem Informasi Desa</a>
-            <div class="flex items-center space-x-4 mt-2 sm:mt-0">
-                <span>Halo, <?= htmlspecialchars($nama_user) ?></span>
-                <a href="../index.php" class="bg-white text-blue-600 px-3 py-1 rounded text-sm hover:bg-gray-100 transition">← Kembali</a>
-                <a href="logout.php" class="bg-red-500 px-3 py-1 rounded text-sm hover:bg-red-600 transition">Logout</a>
+    <!-- Header -->
+    <nav class="bg-blue-600 shadow py-4 px-6 flex justify-between items-center text-white">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold">SD</div>
+            <div>
+                <h1 class="text-xl font-semibold">Desa Rajeg</h1>
+                <p class="text-xs text-blue-100">Kecamatan Rajeg, Kabupaten Tangerang</p>
             </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <a href="../index.php" class="hover:underline">Beranda</a>
+            <span class="border-b-2 border-white font-semibold">Berita</span>
+            <a href="#" class="hover:underline">Galeri</a>
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto px-4 py-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">📰 Semua Berita Desa</h2>
+    <div class="flex flex-col md:flex-row max-w-7xl mx-auto mt-6 px-4 gap-6">
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <?php if (mysqli_num_rows($query) > 0): ?>
+        <!-- Sidebar -->
+        <aside class="w-full md:w-1/4 bg-gradient-to-b from-blue-700 to-blue-600 text-white rounded-xl p-6 shadow">
+            <h2 class="text-lg font-bold mb-2"><i class="fa-solid fa-newspaper mr-2"></i>Berita Desa</h2>
+            <p class="text-sm text-blue-100">Informasi dan berita terbaru dari Desa Rajeg</p>
+        </aside>
+
+        <!-- Konten Berita -->
+        <main class="flex-1">
+
+            <!-- Berita Utama -->
+            <?php if ($berita_utama): ?>
+                <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
+                    <?php
+                    $gambarUtama = "../" . ltrim($berita_utama['gambar'], '/');
+                    $judul = htmlspecialchars($berita_utama['judul']);
+                    $isi = strip_tags($berita_utama['isi']);
+                    ?>
+                    <img src="<?= $gambarUtama ?>" class="w-full h-64 object-cover" alt="Gambar Utama">
+                    <div class="p-5">
+                        <p class="text-sm text-blue-600 mb-2">📅 <?= htmlspecialchars($berita_utama['tanggal']) ?></p>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2"><?= $judul ?></h2>
+                        <p class="text-gray-600 mb-3"><?= substr($isi, 0, 120) ?>...</p>
+                        <a href="#" class="text-blue-700 hover:underline">Baca Selengkapnya →</a>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Berita Lainnya -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <?php while ($berita = mysqli_fetch_assoc($query)): ?>
-                    <div class="bg-white rounded-2xl shadow hover:shadow-lg transition duration-300 flex flex-col">
+                    <div class="bg-white rounded-xl shadow hover:shadow-md transition overflow-hidden flex flex-col">
                         <?php
-                        $gambarPath = "../" . ltrim($berita['gambar'], '/');
-                        if (!empty($berita['gambar']) && file_exists($gambarPath)): ?>
-                            <img src="<?= htmlspecialchars($gambarPath) ?>" alt="Gambar Berita" class="h-48 w-full object-cover rounded-t-2xl">
-                        <?php else: ?>
-                            <div class="h-48 w-full bg-gray-400 flex items-center justify-center text-white text-sm rounded-t-2xl">
-                                Gambar tidak tersedia
-                            </div>
-                        <?php endif; ?>
-
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h5 class="text-lg font-semibold text-gray-900 mb-2"><?= htmlspecialchars($berita['judul']) ?></h5>
-                                <p class="text-gray-700 text-sm mb-4"><?= substr(htmlspecialchars($berita['isi']), 0, 100) ?>...</p>
-                                <p class="text-xs text-gray-500">📅 <?= htmlspecialchars($berita['tanggal']) ?></p>
-                                <span class="text-xs text-gray-600">✍️ <?= htmlspecialchars($berita['penulis']) ?></span>
-                            </div>
+                        $gambar = "../" . ltrim($berita['gambar'], '/');
+                        $isi = strip_tags($berita['isi']);
+                        ?>
+                        <img src="<?= $gambar ?>" class="h-40 w-full object-cover" alt="Gambar">
+                        <div class="p-4 flex flex-col flex-grow">
+                            <span class="text-xs text-blue-600 mb-1">📅 <?= htmlspecialchars($berita['tanggal']) ?></span>
+                            <h5 class="font-semibold text-gray-900"><?= htmlspecialchars($berita['judul']) ?></h5>
+                            <p class="text-sm text-gray-600 mt-2 flex-grow"><?= substr($isi, 0, 80) ?>...</p>
+                            <a href="#" class="mt-3 text-blue-700 hover:underline text-sm">Baca Selengkapnya</a>
                         </div>
                     </div>
                 <?php endwhile; ?>
-            <?php else: ?>
-                <p class="text-gray-500">Belum ada berita tersedia.</p>
-            <?php endif; ?>
-        </div>
+            </div>
+        </main>
     </div>
 
 </body>
