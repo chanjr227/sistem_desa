@@ -4,6 +4,11 @@ require '../config/config.php';
 require '../helpers/auth_helpers.php';
 check_access(['admin', 'staff_desa', 'rt']);
 
+$popup_message = '';
+if (isset($_SESSION['access_denied'])) {
+    $popup_message = $_SESSION['access_denied'];
+    unset($_SESSION['access_denied']);
+}
 
 $struktur = $koneksi->query("SELECT id, nama, jabatan, nip, jenis_kelamin, tanggal_lahir, alamat, foto FROM karyawan ORDER BY id");
 
@@ -230,7 +235,7 @@ if (isset($_GET['hapus'])) {
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Login sebagai:</div>
-                    <?= htmlspecialchars($_SESSION['name'] ?? 'Admin Desa') ?>
+                    <?= htmlspecialchars($_SESSION['nama'] ?? 'Admin Desa') ?>
                 </div>
 
             </nav>
@@ -488,6 +493,20 @@ if (isset($_GET['hapus'])) {
             });
         });
     </script>
+    !-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <?php if (!empty($popup_message)): ?>
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Akses Ditolak',
+                text: <?= json_encode($popup_message) ?>,
+                confirmButtonText: 'OK'
+            });
+        </script>
+    <?php endif; ?>
+
 </body>
 
 </html>
