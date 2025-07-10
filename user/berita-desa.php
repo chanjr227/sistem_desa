@@ -51,7 +51,6 @@ $berita_utama = mysqli_fetch_assoc($query);
 
         <!-- Konten Berita -->
         <main class="flex-1">
-
             <!-- Berita Utama -->
             <?php if ($berita_utama): ?>
                 <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
@@ -65,7 +64,7 @@ $berita_utama = mysqli_fetch_assoc($query);
                         <p class="text-sm text-blue-600 mb-2">📅 <?= htmlspecialchars($berita_utama['tanggal']) ?></p>
                         <h2 class="text-2xl font-bold text-gray-800 mb-2"><?= $judul ?></h2>
                         <p class="text-gray-600 mb-3"><?= substr($isi, 0, 120) ?>...</p>
-                        <a href="#" class="text-blue-700 hover:underline">Baca Selengkapnya →</a>
+                        <a href="berita-detail.php?id=<?= $berita_utama['id'] ?>" class="text-blue-700 hover:underline">Baca Selengkapnya →</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -83,14 +82,13 @@ $berita_utama = mysqli_fetch_assoc($query);
                             <span class="text-xs text-blue-600 mb-1">📅 <?= htmlspecialchars($berita['tanggal']) ?></span>
                             <h5 class="font-semibold text-gray-900"><?= htmlspecialchars($berita['judul']) ?></h5>
                             <p class="text-sm text-gray-600 mt-2 flex-grow"><?= substr($isi, 0, 80) ?>...</p>
-                            <a href="#" class="mt-3 text-blue-700 hover:underline text-sm">Baca Selengkapnya</a>
+                            <a href="berita-detail.php?id=<?= $berita['id'] ?>" class="mt-3 text-blue-700 hover:underline text-sm">Baca Selengkapnya</a>
                         </div>
                     </div>
                 <?php endwhile; ?>
             </div>
         </main>
     </div>
-
 </body>
 
 </html>
