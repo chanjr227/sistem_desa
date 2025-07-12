@@ -1,9 +1,10 @@
 <?php
+session_start();
 require '../config/config.php';
 require '../helpers/log_helpers.php';
 
 // Panggil log
-simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Meminta reset password');
+// simpan_log($koneksi, $_SESSION['userid'], $_SESSION['nama'], 'Meminta reset password');
 
 $token = $_GET['token'] ?? '';
 $success = false;
