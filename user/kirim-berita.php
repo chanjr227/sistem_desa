@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="flex justify-between items-center max-w-6xl mx-auto">
             <a href="../index.php" class="text-lg font-bold">Sistem Informasi Desa</a>
             <div class="flex items-center space-x-3 text-sm">
-                <span>👋 <?= htmlspecialchars($_SESSION['nama'] ?? 'Warga', ENT_QUOTES, 'UTF-8') ?></span>
+                <span>halo, <?= htmlspecialchars($_SESSION['nama'] ?? 'Warga', ENT_QUOTES, 'UTF-8') ?></span>
                 <a href="../index.php" class="bg-white text-blue-600 px-3 py-1 rounded hover:bg-blue-100 transition">← Kembali</a>
                 <a href="logout.php" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-white transition">Logout</a>
             </div>

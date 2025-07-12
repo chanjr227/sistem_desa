@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container d-flex justify-content-between align-items-center">
             <a class="text-white fw-bold" href="../index.php">🌾 Sistem Informasi Desa</a>
             <div class="d-flex gap-2 align-items-center">
-                <span>👋 <?= htmlspecialchars($_SESSION['nama'] ?? 'Warga', ENT_QUOTES, 'UTF-8') ?></span>
+                <span>halo,<?= htmlspecialchars($_SESSION['nama'] ?? 'Warga', ENT_QUOTES, 'UTF-8') ?></span>
                 <a href="../index.php" class="btn btn-light btn-sm">← Kembali</a>
                 <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
             </div>
