@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $messageType = "error";
     } else {
         $recaptcha = $_POST['g-recaptcha-response'];
-        $secretKey = "6LdQX4IrAAAAAMpRlW1Jn6UjezJ4N0Pv76zkuea8"; // <- Ganti dengan reCAPTCHA secret key kamu
+        $secretKey = ""; // <- Ganti dengan reCAPTCHA secret key kamu
 
         $response = file_get_contents(
             "https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$recaptcha"
@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <!-- Google reCAPTCHA v2 -->
-            <div class="g-recaptcha" data-sitekey="6LdQX4IrAAAAAE3Ikk8LbGUX6h8C1ftP7wWNftNg"></div>
+            <div class="g-recaptcha" data-sitekey=""></div>
 
             <div class="extra">
                 <label><input type="checkbox" name=""> Ingat saya</label>

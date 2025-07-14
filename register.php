@@ -16,49 +16,65 @@ if (empty($_SESSION['csrf'])) {
 $error = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Cross-Site Request Forgery (CSRF)
+    // ✅ CSRF Protection
     if (!isset($_POST['csrf']) || !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
         die("⚠️ Permintaan tidak valid (CSRF).");
     }
 
-    // Ambil & validasi input
-    $nama = htmlspecialchars(trim($_POST['nama'] ?? ''));
-    $email = filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL);
-    $password = $_POST['password'] ?? '';
-    $password_confirm = $_POST['password_confirm'] ?? '';
+    // ✅ reCAPTCHA v2 Verification
+    if (empty($_POST['g-recaptcha-response'])) {
+        $error = "⚠️ Silakan centang reCAPTCHA terlebih dahulu.";
+    } else {
+        $recaptcha = $_POST['g-recaptcha-response'];
+        $secretKey = ''; // Ganti dengan secret key kamu
+        $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$recaptcha");
+        $captchaResponse = json_decode($verify, true);
 
-    if (!$email) {
-        $error = "Email tidak valid.";
-        //Insecure Design
-    } elseif (strlen($password) < 8) {
-        $error = "Password minimal 8 karakter.";
-    } elseif ($password !== $password_confirm) {
-        $error = "Password dan konfirmasi tidak cocok!";
-    } else { // Injection (SQL Injection) 
-        $check = $koneksi->prepare("SELECT email FROM users WHERE email = ?");
-        $check->bind_param("s", $email);
-        $check->execute();
-        $check->store_result();
-
-        if ($check->num_rows > 0) {
-            $error = "Email sudah terdaftar!";
-        } else { // Broken Authentication 
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $role = "user";
-
-            $stmt = $koneksi->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssss", $nama, $email, $hashedPassword, $role);
-
-            if ($stmt->execute()) {
-                header("Location: login.php?register=success");
-                exit();
-            } else {
-                // Hindari tampilkan detail kesalahan database ke user (Security Misconfiguration)
-                $error = "Terjadi kesalahan saat registrasi. Silakan coba lagi.";
-            }
-            $stmt->close();
+        if (!$captchaResponse["success"]) {
+            $error = "❌ Verifikasi reCAPTCHA gagal. Silakan coba lagi.";
         }
-        $check->close();
+    }
+
+    // Jika tidak ada error dari captcha, lanjut validasi form
+    if (!$error) {
+        $nama = htmlspecialchars(trim($_POST['nama'] ?? ''));
+        $email = filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL);
+        $password = $_POST['password'] ?? '';
+        $password_confirm = $_POST['password_confirm'] ?? '';
+
+        if (!$email) {
+            $error = "Email tidak valid.";
+        } elseif (strlen($password) < 8) {
+            $error = "Password minimal 8 karakter.";
+        } elseif ($password !== $password_confirm) {
+            $error = "Password dan konfirmasi tidak cocok!";
+        } else {
+            // ✅ SQL Injection Prevention
+            $check = $koneksi->prepare("SELECT email FROM users WHERE email = ?");
+            $check->bind_param("s", $email);
+            $check->execute();
+            $check->store_result();
+
+            if ($check->num_rows > 0) {
+                $error = "Email sudah terdaftar!";
+            } else {
+                // ✅ Password Hashing
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                $role = "user";
+
+                $stmt = $koneksi->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param("ssss", $nama, $email, $hashedPassword, $role);
+
+                if ($stmt->execute()) {
+                    header("Location: login.php?register=success");
+                    exit();
+                } else {
+                    $error = "Terjadi kesalahan saat registrasi. Silakan coba lagi.";
+                }
+                $stmt->close();
+            }
+            $check->close();
+        }
     }
 }
 ?>
@@ -71,6 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Registrasi</title>
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
@@ -105,8 +122,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label>Konfirmasi Password</label>
                 <i class="fa-solid fa-lock"></i>
             </div>
-            <!--Cross-Site Request Forgery (CSRF) -->
-            <!-- CSRF Token -->
+
+            <!-- ✅ reCAPTCHA -->
+            <div class="g-recaptcha" data-sitekey=""></div>
+
+            <!-- ✅ CSRF Token -->
             <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
 
             <button type="submit" class="btnLogin">Daftar</button>
