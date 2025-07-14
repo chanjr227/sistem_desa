@@ -3,15 +3,9 @@ require 'config/config.php';
 require 'helpers/log_helpers.php';
 session_start();
 
-// ✅ Tambahan: Generate CSRF token saat form login ditampilkan
+// Generate CSRF token
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
-// Notifikasi timeout logout
-if (isset($_GET['timeout'])) {
-    $message = "⏱️ Sesi Anda telah berakhir karena tidak aktif selama 20 menit.";
-    $messageType = "warning";
 }
 
 // Redirect jika sudah login
@@ -20,80 +14,99 @@ if (isset($_SESSION['log']) && in_array($_SESSION['role'], ['admin', 'staff_desa
     exit;
 }
 
-$message = $message ?? null;
-$messageType = $messageType ?? null;
+$message = null;
+$messageType = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // ✅ Tambahan: Verifikasi CSRF token
+    // ✅ Verifikasi CSRF token
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         die("🚫 Permintaan tidak sah (CSRF terdeteksi)");
     }
 
-    // SQL Injection protection
-    $stmt = $koneksi->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // ✅ Verifikasi Google reCAPTCHA
+    if (empty($_POST['g-recaptcha-response'])) {
+        $message = "⚠️ Silakan centang reCAPTCHA terlebih dahulu.";
+        $messageType = "error";
+    } else {
+        $recaptcha = $_POST['g-recaptcha-response'];
+        $secretKey = "6LdQX4IrAAAAAMpRlW1Jn6UjezJ4N0Pv76zkuea8"; // <- Ganti dengan reCAPTCHA secret key kamu
 
-    if ($result && $data = $result->fetch_assoc()) {
-        if ($data['is_locked']) {
-            $message = "⚠️ Akun Anda dikunci karena terlalu banyak percobaan login gagal.<br>
-                <a href='user/reset-request.php?email=" . urlencode($email) . "'>Klik di sini untuk reset password via email</a>";
-            $messageType = "error";
-        } elseif (password_verify($password, $data['password'])) {
-            // ✅ Tambahan: Regenerasi session ID
-            session_regenerate_id(true);
+        $response = file_get_contents(
+            "https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$recaptcha"
+        );
+        $result = json_decode($response, true);
 
-            // Reset percobaan login
-            $stmt = $koneksi->prepare("UPDATE users SET login_attempts = 0, is_locked = 0 WHERE userid = ?");
-            $stmt->bind_param("i", $data['userid']);
-            $stmt->execute();
-
-            // Set session
-            $_SESSION['log'] = true;
-            $_SESSION['userid'] = $data['userid'];
-            $_SESSION['email'] = $data['email'];
-            $_SESSION['role'] = $data['role'];
-            $_SESSION['nama'] = $data['name'];
-            $_SESSION['last_active'] = time();
-
-            // Logging
-            simpan_log($koneksi, $data['userid'], $data['name'], 'Login berhasil');
-
-            if (in_array($data['role'], ['admin', 'staff_desa', 'rt'])) {
-                header('Location: admin/dashboard.php');
-            } else {
-                $_SESSION['login_success'] = "Login berhasil. Selamat datang!";
-                header('Location: index.php');
-            }
-            exit;
-        } else {
-            // Brute force protection
-            $attempts = $data['login_attempts'] + 1;
-            $is_locked = $attempts >= 3 ? 1 : 0;
-
-            $stmt = $koneksi->prepare("UPDATE users SET login_attempts = ?, is_locked = ? WHERE userid = ?");
-            $stmt->bind_param("iii", $attempts, $is_locked, $data['userid']);
-            $stmt->execute();
-
-            simpan_log($koneksi, $data['userid'], $data['name'], "Login gagal (ke-$attempts)");
-
-            if ($is_locked) {
-                simpan_log($koneksi, $data['userid'], $data['name'], "Akun dikunci otomatis");
-                $message = "⚠️ Akun Anda telah dikunci karena 3 kali login gagal.<br>
-                    <a href='user/reset-request.php?email=" . urlencode($email) . "'>Klik di sini untuk reset password via email</a>";
-            } else {
-                $message = "Email atau password salah! Percobaan ke-{$attempts}.";
-            }
-
+        if (!$result["success"]) {
+            $message = "❌ Verifikasi reCAPTCHA gagal. Coba lagi.";
             $messageType = "error";
         }
-    } else {
-        $message = "Akun tidak ditemukan!";
-        $messageType = "error";
+    }
+
+    // ✅ Lanjut login hanya jika tidak ada error dari CSRF/reCAPTCHA
+    if (!$messageType) {
+        $stmt = $koneksi->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result && $data = $result->fetch_assoc()) {
+            if ($data['is_locked']) {
+                $message = "⚠️ Akun Anda dikunci karena terlalu banyak percobaan login gagal.<br>
+                <a href='user/reset-request.php?email=" . urlencode($email) . "'>Klik di sini untuk reset password via email</a>";
+                $messageType = "error";
+            } elseif (password_verify($password, $data['password'])) {
+                session_regenerate_id(true);
+
+                // Reset percobaan gagal
+                $stmt = $koneksi->prepare("UPDATE users SET login_attempts = 0, is_locked = 0 WHERE userid = ?");
+                $stmt->bind_param("i", $data['userid']);
+                $stmt->execute();
+
+                // Set session
+                $_SESSION['log'] = true;
+                $_SESSION['userid'] = $data['userid'];
+                $_SESSION['email'] = $data['email'];
+                $_SESSION['role'] = $data['role'];
+                $_SESSION['nama'] = $data['name'];
+                $_SESSION['last_active'] = time();
+
+                simpan_log($koneksi, $data['userid'], $data['name'], 'Login berhasil');
+
+                if (in_array($data['role'], ['admin', 'staff_desa', 'rt'])) {
+                    header('Location: admin/dashboard.php');
+                } else {
+                    $_SESSION['login_success'] = "Login berhasil. Selamat datang!";
+                    header('Location: index.php');
+                }
+                exit;
+            } else {
+                // Brute force protection
+                $attempts = $data['login_attempts'] + 1;
+                $is_locked = $attempts >= 3 ? 1 : 0;
+
+                $stmt = $koneksi->prepare("UPDATE users SET login_attempts = ?, is_locked = ? WHERE userid = ?");
+                $stmt->bind_param("iii", $attempts, $is_locked, $data['userid']);
+                $stmt->execute();
+
+                simpan_log($koneksi, $data['userid'], $data['name'], "Login gagal (ke-$attempts)");
+
+                if ($is_locked) {
+                    simpan_log($koneksi, $data['userid'], $data['name'], "Akun dikunci otomatis");
+                    $message = "⚠️ Akun Anda telah dikunci karena 3 kali login gagal.<br>
+                        <a href='user/reset-request.php?email=" . urlencode($email) . "'>Klik di sini untuk reset password via email</a>";
+                } else {
+                    $message = "Email atau password salah! Percobaan ke-{$attempts}.";
+                }
+
+                $messageType = "error";
+            }
+        } else {
+            $message = "Akun tidak ditemukan!";
+            $messageType = "error";
+        }
     }
 }
 ?>
@@ -120,7 +133,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
-            <!-- ✅ CSRF token -->
             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
             <div class="input-box">
@@ -135,6 +147,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fa-solid fa-eye-slash"></i>
                 </button>
             </div>
+
+            <!-- Google reCAPTCHA v2 -->
+            <div class="g-recaptcha" data-sitekey="6LdQX4IrAAAAAE3Ikk8LbGUX6h8C1ftP7wWNftNg"></div>
+
             <div class="extra">
                 <label><input type="checkbox" name=""> Ingat saya</label>
                 <a href="user/reset-request.php">Lupa password?</a>
@@ -146,6 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
     <script src="js/login.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 
 </html>
