@@ -3,14 +3,18 @@ require 'config/config.php';
 require 'helpers/log_helpers.php';
 session_start();
 
+// ✅ Tambahan: Generate CSRF token saat form login ditampilkan
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 // Notifikasi timeout logout
 if (isset($_GET['timeout'])) {
     $message = "⏱️ Sesi Anda telah berakhir karena tidak aktif selama 20 menit.";
     $messageType = "warning";
 }
-// Broken Access Control 
-// Redirect jika sudah login
 
+// Redirect jika sudah login
 if (isset($_SESSION['log']) && in_array($_SESSION['role'], ['admin', 'staff_desa', 'rt'])) {
     header('Location: admin/dashboard.php');
     exit;
@@ -22,18 +26,27 @@ $messageType = $messageType ?? null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
-    //Injection (SQL Injection)
+
+    // ✅ Tambahan: Verifikasi CSRF token
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("🚫 Permintaan tidak sah (CSRF terdeteksi)");
+    }
+
+    // SQL Injection protection
     $stmt = $koneksi->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
-    //Broken Authentication – [OWASP A02]
+
     if ($result && $data = $result->fetch_assoc()) {
         if ($data['is_locked']) {
             $message = "⚠️ Akun Anda dikunci karena terlalu banyak percobaan login gagal.<br>
                 <a href='user/reset-request.php?email=" . urlencode($email) . "'>Klik di sini untuk reset password via email</a>";
             $messageType = "error";
         } elseif (password_verify($password, $data['password'])) {
+            // ✅ Tambahan: Regenerasi session ID
+            session_regenerate_id(true);
+
             // Reset percobaan login
             $stmt = $koneksi->prepare("UPDATE users SET login_attempts = 0, is_locked = 0 WHERE userid = ?");
             $stmt->bind_param("i", $data['userid']);
@@ -46,7 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role'] = $data['role'];
             $_SESSION['nama'] = $data['name'];
             $_SESSION['last_active'] = time();
-            // Security Logging & Monitoring – [OWASP A09]
+
+            // Logging
             simpan_log($koneksi, $data['userid'], $data['name'], 'Login berhasil');
 
             if (in_array($data['role'], ['admin', 'staff_desa', 'rt'])) {
@@ -55,19 +69,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['login_success'] = "Login berhasil. Selamat datang!";
                 header('Location: index.php');
             }
-
             exit;
         } else {
-            //Brute Force Protection 
+            // Brute force protection
             $attempts = $data['login_attempts'] + 1;
             $is_locked = $attempts >= 3 ? 1 : 0;
 
             $stmt = $koneksi->prepare("UPDATE users SET login_attempts = ?, is_locked = ? WHERE userid = ?");
             $stmt->bind_param("iii", $attempts, $is_locked, $data['userid']);
             $stmt->execute();
-            // Security Logging & Monitoring – [OWASP A09]
+
             simpan_log($koneksi, $data['userid'], $data['name'], "Login gagal (ke-$attempts)");
-            // Security Logging & Monitoring – [OWASP A09]
+
             if ($is_locked) {
                 simpan_log($koneksi, $data['userid'], $data['name'], "Akun dikunci otomatis");
                 $message = "⚠️ Akun Anda telah dikunci karena 3 kali login gagal.<br>
@@ -106,6 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?= $message ?>
                 </div>
             <?php endif; ?>
+
+            <!-- ✅ CSRF token -->
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
             <div class="input-box">
                 <input type="text" name="email" required>
