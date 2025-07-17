@@ -316,27 +316,27 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
                 <div class="tree">
                     <ul>
                         <li>
-                            <a href="#"><img src="aset/yanyan2.jpg">Lurah<br><small>Yanyan Julyandi</small></a>
+                            <a href="#"><img src="aset/yanyan3.jpg">Lurah<br><small>Yanyan Julyandi</small></a>
                             <ul>
                                 <li>
-                                    <a href="#"><img src="aset/rojak2.jpg">Sekretaris Desa<br><small>Bintang Rogerman</small></a>
+                                    <a href="#"><img src="aset/rojak3.jpg">Sekretaris Desa<br><small>Bintang Rogerman</small></a>
                                     <ul>
                                         <li><a href="#"><img src="aset/rojak2.jpg">Bendahara<br><small>Bintang Rogerman</small></a></li>
-                                        <li><a href="#"><img src="aset/ucup.jpg">Kaur Umum<br><small>M. Yusuf</small></a></li>
+                                        <li><a href="#"><img src="aset/yusuf.jpg">Kaur Umum<br><small>M. Yusuf</small></a></li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="#"><img src="aset/yanyan2.jpg">RW 01<br><small>Yanyan Julyandi</small></a>
+                                    <a href="#"><img src="aset/yanyan3.jpg">RW 01<br><small>Yanyan Julyandi</small></a>
                                     <ul>
-                                        <li><a href="#"><img src="aset/ucup.jpg">RT 01<br><small>M. Yusuf</small></a></li>
-                                        <li><a href="#"><img src="aset/rojak2.jpg">RT 02<br><small>Bintang Rogerman</small></a></li>
+                                        <li><a href="#"><img src="aset/yusuf.jpg">RT 01<br><small>M. Yusuf</small></a></li>
+                                        <li><a href="#"><img src="aset/rojak3.jpg">RT 02<br><small>Bintang Rogerman</small></a></li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="#"><img src="aset/ucup.jpg">RW 02<br><small>M. Yusuf</small></a>
+                                    <a href="#"><img src="aset/yusuf.jpg">RW 02<br><small>M. Yusuf</small></a>
                                     <ul>
-                                        <li><a href="#"><img src="aset/rojak2.jpg">RT 03<br><small>Bintang Rogerman</small></a></li>
-                                        <li><a href="#"><img src="aset/ucup.jpg">RT 04<br><small>M. Yusuf</small></a></li>
+                                        <li><a href="#"><img src="aset/rojak3.jpg">RT 03<br><small>Bintang Rogerman</small></a></li>
+                                        <li><a href="#"><img src="aset/yusuf.jpg">RT 04<br><small>M. Yusuf</small></a></li>
                                     </ul>
                                 </li>
                             </ul>

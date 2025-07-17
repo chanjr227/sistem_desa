@@ -3,11 +3,6 @@ require 'config/config.php';
 require 'helpers/log_helpers.php';
 session_start();
 
-// Generate CSRF token
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
 // Redirect jika sudah login
 if (isset($_SESSION['log']) && in_array($_SESSION['role'], ['admin', 'staff_desa', 'rt'])) {
     header('Location: admin/dashboard.php');
@@ -21,92 +16,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // ✅ Verifikasi CSRF token
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die("🚫 Permintaan tidak sah (CSRF terdeteksi)");
-    }
+    // ❌ Versi raw SQL yang rentan SQL Injection
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($koneksi, $sql);
 
-    // ✅ Verifikasi Google reCAPTCHA
-    if (empty($_POST['g-recaptcha-response'])) {
-        $message = "⚠️ Silakan centang reCAPTCHA terlebih dahulu.";
-        $messageType = "error";
-    } else {
-        $recaptcha = $_POST['g-recaptcha-response'];
-        $secretKey = ""; // <- Ganti dengan reCAPTCHA secret key kamu
-
-        $response = file_get_contents(
-            "https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$recaptcha"
-        );
-        $result = json_decode($response, true);
-
-        if (!$result["success"]) {
-            $message = "❌ Verifikasi reCAPTCHA gagal. Coba lagi.";
+    if ($result && $data = mysqli_fetch_assoc($result)) {
+        if ($data['is_locked']) {
+            $message = "⚠️ Akun Anda dikunci karena terlalu banyak percobaan login gagal.";
             $messageType = "error";
-        }
-    }
+        } elseif ($password == $data['password']) { // ❌ Tidak menggunakan hash (juga berbahaya!)
+            $_SESSION['log'] = true;
+            $_SESSION['userid'] = $data['userid'];
+            $_SESSION['email'] = $data['email'];
+            $_SESSION['role'] = $data['role'];
+            $_SESSION['nama'] = $data['name'];
+            $_SESSION['last_active'] = time();
 
-    // ✅ Lanjut login hanya jika tidak ada error dari CSRF/reCAPTCHA
-    if (!$messageType) {
-        $stmt = $koneksi->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result && $data = $result->fetch_assoc()) {
-            if ($data['is_locked']) {
-                $message = "⚠️ Akun Anda dikunci karena terlalu banyak percobaan login gagal.<br>
-                <a href='user/reset-request.php?email=" . urlencode($email) . "'>Klik di sini untuk reset password via email</a>";
-                $messageType = "error";
-            } elseif (password_verify($password, $data['password'])) {
-                session_regenerate_id(true);
-
-                // Reset percobaan gagal
-                $stmt = $koneksi->prepare("UPDATE users SET login_attempts = 0, is_locked = 0 WHERE userid = ?");
-                $stmt->bind_param("i", $data['userid']);
-                $stmt->execute();
-
-                // Set session
-                $_SESSION['log'] = true;
-                $_SESSION['userid'] = $data['userid'];
-                $_SESSION['email'] = $data['email'];
-                $_SESSION['role'] = $data['role'];
-                $_SESSION['nama'] = $data['name'];
-                $_SESSION['last_active'] = time();
-
-                simpan_log($koneksi, $data['userid'], $data['name'], 'Login berhasil');
-
-                if (in_array($data['role'], ['admin', 'staff_desa', 'rt'])) {
-                    header('Location: admin/dashboard.php');
-                } else {
-                    $_SESSION['login_success'] = "Login berhasil. Selamat datang!";
-                    header('Location: index.php');
-                }
-                exit;
-            } else {
-                // Brute force protection
-                $attempts = $data['login_attempts'] + 1;
-                $is_locked = $attempts >= 3 ? 1 : 0;
-
-                $stmt = $koneksi->prepare("UPDATE users SET login_attempts = ?, is_locked = ? WHERE userid = ?");
-                $stmt->bind_param("iii", $attempts, $is_locked, $data['userid']);
-                $stmt->execute();
-
-                simpan_log($koneksi, $data['userid'], $data['name'], "Login gagal (ke-$attempts)");
-
-                if ($is_locked) {
-                    simpan_log($koneksi, $data['userid'], $data['name'], "Akun dikunci otomatis");
-                    $message = "⚠️ Akun Anda telah dikunci karena 3 kali login gagal.<br>
-                        <a href='user/reset-request.php?email=" . urlencode($email) . "'>Klik di sini untuk reset password via email</a>";
-                } else {
-                    $message = "Email atau password salah! Percobaan ke-{$attempts}.";
-                }
-
-                $messageType = "error";
-            }
+            header('Location: index.php');
+            exit;
         } else {
-            $message = "Akun tidak ditemukan!";
+            $message = "Email atau password salah!";
             $messageType = "error";
         }
+    } else {
+        $message = "Akun tidak ditemukan!";
+        $messageType = "error";
     }
 }
 ?>
