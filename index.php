@@ -94,7 +94,7 @@ $berita = mysqli_query($koneksi, "SELECT * FROM berita_desa ORDER BY tanggal DES
     </section>
 
     <div class="container mt-5">
-        <h2 class="mb-4">Dashboard Utama</h2>
+        <h2 class="mb-4">Dashboard</h2>
 
         <div class="col-12">
             <div class="card shadow-sm p-4">
