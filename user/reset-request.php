@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = "❌ Gagal mengirim email. Error: {$mail->ErrorInfo}";
             }
         } else {
-            $message = "❌ Email tidak ditemukan.";
+            $message = "Email tidak ditemukan.";
         }
     } else {
         $message = "❌ Format email tidak valid.";
