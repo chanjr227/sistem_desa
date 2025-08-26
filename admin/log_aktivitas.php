@@ -18,7 +18,7 @@ $result = $koneksi->query("SELECT user_log.*, users.email FROM user_log JOIN use
 
 <body>
     <div class="container mt-4">
-        <h2 class="mb-3">📄 Log Aktivitas Pengguna</h2>
+        <h2 class="mb-3">Log Aktivitas Pengguna</h2>
         <table class="table table-bordered">
             <thead class="table-light">
                 <tr>
