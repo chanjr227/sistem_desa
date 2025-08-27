@@ -23,7 +23,7 @@ $result = $koneksi->query("SELECT user_log.*, users.email FROM user_log JOIN use
             <thead class="table-light">
                 <tr>
                     <th>No</th>
-                    <th>Nama</th>
+                    <th>Nama Pengguna</th>
                     <th>Email</th>
                     <th>Aktivitas</th>
                     <th>Waktu</th>
